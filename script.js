@@ -78,6 +78,18 @@ const birthdayConfig = {
     "Tao chúc mày năm nay đỡ mệt hơn, bớt gặp chuyện xàm hơn, và mấy cái mày đang cố thì sớm có kết quả tử tế.",
     "Nếu mở cái web này ra mà mày cười được một cái thì coi như tao làm đúng việc rồi. Sinh nhật vui vẻ nhé.",
   ],
+  photos: [
+    {
+      src: "./assets/photos/portrait.jpg",
+      alt: "Chân dung trong tà áo dài xanh nhạt",
+      caption: "Tấm này nhìn rất êm."
+    },
+    {
+      src: "./assets/photos/closeup.jpg",
+      alt: "Ảnh cận mặt",
+      caption: "Tấm này thì sát thương cao."
+    }
+  ]
 };
 
 const elementMap = {
@@ -89,6 +101,7 @@ const elementMap = {
   heroDateValue: document.getElementById("heroDateValue"),
   heroDateNote: document.getElementById("heroDateNote"),
   storyIntro: document.getElementById("storyIntro"),
+  photoGallery: document.getElementById("photoGallery"),
   wishList: document.getElementById("wishList"),
   momentsGrid: document.getElementById("momentsGrid"),
   giftGrid: document.getElementById("giftGrid"),
@@ -154,6 +167,7 @@ function populateContent() {
   elementMap.letterSignature.textContent = `Tao đây, ${birthdayConfig.fromName}`;
 
   elementMap.heroChips.replaceChildren();
+  elementMap.photoGallery.replaceChildren();
   elementMap.wishList.replaceChildren();
   elementMap.momentsGrid.replaceChildren();
   elementMap.giftGrid.replaceChildren();
@@ -170,6 +184,16 @@ function populateContent() {
     const textNode = document.createElement("p");
     textNode.textContent = paragraph;
     elementMap.letterBody.appendChild(textNode);
+  });
+
+  birthdayConfig.photos.forEach((photo) => {
+    const item = document.createElement("figure");
+    item.className = "photo-card";
+    item.innerHTML = `
+      <img src="${photo.src}" alt="${photo.alt}" loading="lazy" />
+      <figcaption>${photo.caption}</figcaption>
+    `;
+    elementMap.photoGallery.appendChild(item);
   });
 
   birthdayConfig.wishes.forEach((wish) => {

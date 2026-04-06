@@ -382,20 +382,11 @@ h2 {
   font-size: 0.9rem;
 }
 
-.photo-collage {
-  position: relative;
+.photo-gallery {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 250px;
-  gap: 1.1rem;
-  align-items: end;
-}
-
-.photo-stack {
-  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
-  align-self: center;
-  margin-left: -3.5rem;
-  z-index: 1;
+  align-self: start;
 }
 
 .photo-card {
@@ -425,39 +416,23 @@ h2 {
   object-fit: cover;
 }
 
-.photo-card-tall {
+.photo-card {
   aspect-ratio: 4 / 5;
-  min-height: 540px;
-  transform: rotate(-2.2deg);
+  min-height: 280px;
 }
 
-.photo-card-square {
-  aspect-ratio: 1 / 1;
-  transform: rotate(3deg);
-}
-
-.photo-caption-card {
-  padding: 1.1rem 1.15rem;
-  border-radius: 24px;
-  background: rgba(255, 250, 246, 0.9);
-  border: 1px solid rgba(216, 91, 122, 0.1);
-  box-shadow: 0 18px 40px rgba(104, 57, 72, 0.12);
-}
-
-.photo-caption-label {
-  display: inline-block;
-  margin-bottom: 0.55rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--accent-strong);
-}
-
-.photo-caption-card p {
-  margin: 0;
-  color: var(--muted);
-  line-height: 1.7;
+.photo-card figcaption {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 2;
+  padding: 0.7rem 0.85rem;
+  border-radius: 16px;
+  background: rgba(33, 20, 25, 0.42);
+  color: white;
+  font-size: 0.9rem;
+  backdrop-filter: blur(10px);
 }
 
 .accent-card {
@@ -849,8 +824,8 @@ h2 {
     padding: 1.5rem;
   }
 
-  .photo-collage {
-    grid-template-columns: minmax(0, 1fr) 220px;
+  .photo-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .gift-card {
@@ -885,24 +860,13 @@ h2 {
     padding: 1.25rem;
   }
 
-  .photo-collage {
+  .photo-gallery {
     grid-template-columns: 1fr;
     gap: 0.9rem;
   }
 
-  .photo-stack {
-    margin-left: 0;
-  }
-
-  .photo-card-tall {
-    min-height: 420px;
-    transform: rotate(0deg);
-  }
-
-  .photo-card-square {
-    max-width: 280px;
-    justify-self: end;
-    transform: rotate(0deg);
+  .photo-card {
+    min-height: 360px;
   }
 
   h1 {
