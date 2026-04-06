@@ -1,27 +1,21 @@
-# embemorning
+# EmbeMorning Demo
 
-Microsite chuc mung sinh nhat duoc tach tu base `BirthDays` va duoc su dung cho project `embemorning`.
+Phien ban demo toi gian cua trang web sinh nhat.
 
-## Chinh sua noi dung
+## Giu lai
 
-Mo file `script.js` va cap nhat cac truong trong `birthdayConfig`:
+- Hero mo dau
+- Gallery anh
+- Bang loi chuc dau
+- Mot section noi dung bo sung
 
-- `recipientName`: ten nguoi nhan
-- `fromName`: ten cua ban
-- `birthdayDate`: ngay sinh theo dinh dang `YYYY-MM-DD`, hien dang la `2026-04-29`
-- `heroLead`, `heroNote`, `storyIntro`, `finalTitle`, `finalCopy`
-- `wishes`, `moments`, `gifts`, `letterTitle`, `letterBody`
+## Loai bo
+
+- Countdown
+- Thu mo bang modal
+- Qua mo tung the
+- Section 3D interactive
 
 ## Chay local
 
-Day la static site, co the preview bang bat ky server don gian nao, vi du:
-
-```bash
-python3 -m http.server 4173
-```
-
-Sau do mo `http://localhost:4173`.
-
-## Deploy
-
-Repo nay duoc publish truc tiep tu nhanh `main` va thu muc goc `/` bang GitHub Pages.
+Day la static site, co the preview bang bat ky server don gian nao.
