@@ -1,81 +1,83 @@
 const birthdayConfig = {
-  recipientName: "Em",
+  recipientName: "My Princess",
   fromName: "Hiếu",
   birthdayDate: "2026-06-27",
-  heroKicker: "27/06 | một góc nhỏ dành riêng cho em",
+  heroKicker: "27/06 | Một góc nhỏ cho m",
   heroLead:
     "Ngày 27/06 nên được bắt đầu bằng một điều gì đó dịu dàng, nên mình làm chiếc web này để mọi lời chúc có chỗ ở lại thật lâu.",
   heroNote:
-    "Không cần quá ồn ào, chỉ cần khi mở trang này ra em biết là có người đã nhớ ngày của em, đã ngồi chuẩn bị từng đoạn chữ, từng bất ngờ nhỏ và đợi đúng hôm đó để chúc mừng.",
-  heroChips: ["đếm ngược tới 27/06", "mở thư tay", "xoay bó hoa ánh sáng"],
-  dateNote: "Mọi điều dễ thương sẽ hẹn nhau đến đúng ngày này.",
+    "Không màu mè gì lắm. Chỉ là tao nhớ sinh nhật mày, nên ngồi gõ mấy dòng này với vài trò linh tinh để mày mở ra thấy vui.",
+  heroChips: ["đếm ngược tới 27/06", "mở thư tao viết", "xoay bó hoa ánh sáng"],
+  dateNote: "Tới đúng ngày này thì nhớ vui vẻ tử tế hộ tao.",
   storyIntro:
-    "Sinh nhật không nhất thiết phải thật lớn. Chỉ cần ngày 27/06 đến, em thấy mình được thương nhiều hơn một chút, được nghỉ ngơi nhiều hơn một chút và được mỉm cười nhiều hơn thường ngày là đã đủ đẹp rồi.",
-  finalTitle: "Chúc cho ngày 27/06 và cả tuổi mới của em đều thật rực rỡ",
+    "Sinh nhật thì không cần làm quá. Chỉ cần hôm đó mày ăn ngon, ngủ kỹ, bớt cáu và thấy đời ổn hơn bình thường một chút là được.",
+  finalTitle:
+    "Chúc mày tuổi mới bớt mệt và gặp nhiều cái hay ho hơn, xinh đẹp hơn nữa",
   finalCopy:
-    "Mong em sẽ có một tuổi mới nhẹ lòng hơn, nhiều may mắn hơn và gặp đúng những điều xứng đáng. Việc đang cố gắng sẽ dần có kết quả, những ngày mệt sẽ sớm qua, còn niềm vui thì ở lại lâu hơn. Và nếu có lúc nào cần một lời nhắc, hãy nhớ rằng em luôn xứng đáng với yêu thương tử tế.",
+    "Mong mày làm gì cũng ra kết quả, thích gì thì có cơ hội làm, ghét gì thì bớt phải đụng. Lúc cần nghỉ thì nghỉ, lúc cần lì thì cứ lì. Nói chung là chúc mày năm nay ổn áp hơn năm ngoái.",
   wishes: [
     {
-      title: "Một ngày thật vui",
-      text: "Để từ sáng đến tối, mọi thứ đều đi theo cách khiến em thấy mình được nâng niu."
+      title: "Ăn ngon ngủ kỹ",
+      text: "Ít nhất sinh nhật phải được một ngày đầu óc nhẹ và bụng không bị bỏ đói.",
     },
     {
-      title: "Một tuổi mới thật nhẹ",
-      text: "Để bớt đi những điều làm em mệt, giữ lại nhiều hơn những điều khiến em yên tâm."
+      title: "Ít drama thôi",
+      text: "Bớt mấy chuyện linh tinh làm tụt mood, để mày còn tập trung sống cho vui.",
     },
     {
-      title: "Một trái tim luôn ấm",
-      text: "Để mỗi lần nhìn lại, em thấy quanh mình vẫn còn rất nhiều dịu dàng."
-    }
+      title: "May mắn đúng lúc",
+      text: "Đúng lúc cần thì có người giúp, đúng lúc cố thì có kết quả, vậy là đẹp.",
+    },
   ],
   moments: [
     {
-      title: "Nụ cười làm sáng cả ngày",
-      text: "Kiểu nụ cười khiến căn phòng tự nhiên mềm xuống và mọi thứ xung quanh cũng trở nên dễ chịu hơn."
+      title: "Mày vui là không khí khác hẳn",
+      text: "Lúc mày cười thoải mái thì mọi thứ xung quanh tự nhiên cũng đỡ nhạt hơn hẳn.",
     },
     {
-      title: "Sự dịu dàng rất hiếm",
-      text: "Em có cách quan tâm người khác theo kiểu rất nhỏ thôi, nhưng đủ để người ta nhớ rất lâu."
+      title: "Bản thân vẫn quan trọng nhất",
+      text: "Không cần phải để ý tới cảm xúc của người khác, t chỉ mong mày luôn vui vẻ, hạnh phúc là được rồi, Mỗ Linh number 01",
     },
     {
-      title: "Nguồn năng lượng khiến người ta muốn ở gần",
-      text: "Vì ở cạnh em luôn có cảm giác ấm, an toàn và không cần phải gồng lên quá nhiều."
-    }
+      title: "Có chất riêng thật",
+      text: "Mày không cần cố giống ai cả, vì kiểu của mày tự nó đã đủ nhớ lâu rồi.",
+    },
   ],
   gifts: [
     {
       icon: "01",
-      title: "Điều đầu tiên",
-      hint: "Một lời chúc ngắn nhưng quan trọng.",
-      secret: "Chúc em luôn thấy mình đủ đẹp, đủ giỏi và đủ xứng đáng với những điều tốt nhất."
+      title: "Quà số một",
+      hint: "Mở ra đi, câu này ngắn thôi.",
+      secret: "Chúc mày sinh nhật vui, đỡ suy, và gặp toàn chuyện tử tế.",
     },
     {
       icon: "02",
-      title: "Điều thứ hai",
-      hint: "Mở ra khi em cần thêm một chút dịu dàng.",
+      title: "Quà số hai",
+      hint: "Cái này để dành lúc mày hơi tụt mood.",
       secret:
-        "Nếu có ngày nào mệt quá, cứ nghỉ một chút cũng được. Em không cần hoàn hảo mới đáng được yêu thương."
+        "Nếu mệt quá thì nghỉ. Không ai chấm điểm mày vì nghỉ một hôm cả.",
     },
     {
       icon: "03",
-      title: "Điều thứ ba",
-      hint: "Dành cho những kế hoạch em đang giữ trong lòng.",
+      title: "Quà số ba",
+      hint: "Dành cho mấy kế hoạch mày chưa nói hết ra.",
       secret:
-        "Mong những dự định của em sẽ gặp đúng cơ hội, đúng người và đúng thời điểm để nở rộ thật đẹp."
+        "Mong mấy thứ mày đang cố sẽ sớm ra hình ra dạng, đỡ bị đời quay như chong chóng.",
     },
     {
       icon: "04",
-      title: "Điều cuối cùng",
-      hint: "Một cái ôm online được gói lại ở đây.",
-      secret: "Trang web này xin gửi tới em một cái ôm rất dài, rất ấm và rất nhiều thương."
-    }
+      title: "Quà cuối",
+      hint: "Coi như một cái vỗ vai online.",
+      secret:
+        "Tao không đứng trước mặt để chúc được thì dùng cái web này bù vào vậy.",
+    },
   ],
-  letterTitle: "Thư gửi riêng ngày 27/06",
+  letterTitle: "Mấy dòng tao viết cho mày ngày 27/06",
   letterBody: [
-    "Ngày 27/06 là một ngày đẹp để nhắc em rằng em quan trọng, theo một cách rất thật và rất yên.",
-    "Mình mong sinh nhật năm nay sẽ mang đến cho em nhiều niềm vui vừa đủ, nhiều món quà đúng ý và nhiều khoảnh khắc khiến em thấy mọi cố gắng của mình đều xứng đáng.",
-    "Nếu chiếc web nhỏ này làm em mỉm cười một chút thôi, thì có lẽ nó đã hoàn thành đúng nhiệm vụ của nó rồi. Chúc em sinh nhật vui vẻ và có một tuổi mới thật nhiều ánh sáng."
-  ]
+    "Tới sinh nhật mày rồi thì tao không muốn chỉ quăng mỗi câu chúc trên tin nhắn, nên mới ngồi làm luôn cái này.",
+    "Tao chúc mày năm nay đỡ mệt hơn, bớt gặp chuyện xàm hơn, và mấy cái mày đang cố thì sớm có kết quả tử tế.",
+    "Nếu mở cái web này ra mà mày cười được một cái thì coi như tao làm đúng việc rồi. Sinh nhật vui vẻ nhé.",
+  ],
 };
 
 const elementMap = {
@@ -108,7 +110,7 @@ const elementMap = {
   flowerBurst: document.getElementById("flowerBurst"),
   surpriseTitle: document.getElementById("surpriseTitle"),
   surpriseMessage: document.getElementById("surpriseMessage"),
-  closeSurpriseBtn: document.getElementById("closeSurpriseBtn")
+  closeSurpriseBtn: document.getElementById("closeSurpriseBtn"),
 };
 
 function parseBirthdayDate(dateString) {
@@ -135,7 +137,7 @@ function populateContent() {
   if (metaDescription) {
     metaDescription.setAttribute(
       "content",
-      `Microsite chúc mừng sinh nhật dành cho ${birthdayConfig.recipientName} vào ngày ${birthdayLabel}.`
+      `Microsite chúc mừng sinh nhật dành cho ${birthdayConfig.recipientName} vào ngày ${birthdayLabel}.`,
     );
   }
 
@@ -149,7 +151,7 @@ function populateContent() {
   elementMap.finalTitle.textContent = birthdayConfig.finalTitle;
   elementMap.finalCopy.textContent = birthdayConfig.finalCopy;
   elementMap.letterTitle.textContent = birthdayConfig.letterTitle;
-  elementMap.letterSignature.textContent = `Thương mến, ${birthdayConfig.fromName}`;
+  elementMap.letterSignature.textContent = `Tao đây, ${birthdayConfig.fromName}`;
 
   elementMap.heroChips.replaceChildren();
   elementMap.wishList.replaceChildren();
@@ -242,7 +244,14 @@ function getNextBirthday(dateString) {
   }
 
   const now = new Date();
-  const upcoming = new Date(now.getFullYear(), parsed.getMonth(), parsed.getDate(), 0, 0, 0);
+  const upcoming = new Date(
+    now.getFullYear(),
+    parsed.getMonth(),
+    parsed.getDate(),
+    0,
+    0,
+    0,
+  );
 
   if (upcoming.getTime() < now.getTime()) {
     upcoming.setFullYear(upcoming.getFullYear() + 1);
@@ -279,19 +288,16 @@ function updateCountdown() {
   elementMap.secondsValue.textContent = String(seconds).padStart(2, "0");
 
   if (totalSeconds === 0) {
-    elementMap.countdownMessage.textContent =
-      `Hôm nay là ${birthdayLabel}, ngày của em rồi. Chúc mừng sinh nhật thật vui nhé.`;
+    elementMap.countdownMessage.textContent = `Hôm nay là ${birthdayLabel}, tới ngày của mày rồi. Vui lên cho đàng hoàng nhé.`;
     return;
   }
 
   if (days === 0) {
-    elementMap.countdownMessage.textContent =
-      `Chỉ còn một chút nữa là tới ${birthdayLabel}. Mọi lời chúc đều đã sẵn sàng.`;
+    elementMap.countdownMessage.textContent = `Chỉ còn một chút nữa là tới ${birthdayLabel}. Tao chuẩn bị lời chúc sẵn hết rồi.`;
     return;
   }
 
-  elementMap.countdownMessage.textContent =
-    `Đồng hồ đang đếm tới ${birthdayLabel}, nơi mọi điều dễ thương sẽ ghé qua đúng hẹn.`;
+  elementMap.countdownMessage.textContent = `Đồng hồ đang đếm tới ${birthdayLabel}. Ráng chờ thêm chút là tới ngày của mày.`;
 }
 
 function createSparkles() {

@@ -9,7 +9,13 @@ const toggleMessageBtn = document.getElementById("toggleMessageBtn");
 const gestureStatus = document.getElementById("gestureStatus");
 const gestureVideo = document.getElementById("gestureVideo");
 
-if (!stage || !startGestureBtn || !toggleMessageBtn || !gestureStatus || !gestureVideo) {
+if (
+  !stage ||
+  !startGestureBtn ||
+  !toggleMessageBtn ||
+  !gestureStatus ||
+  !gestureVideo
+) {
   throw new Error("Interactive birthday scene is missing required DOM nodes.");
 }
 
@@ -26,14 +32,14 @@ const state = {
   cameraStarted: false,
   startingCamera: false,
   frameLoopRunning: false,
-  stream: null
+  stream: null,
 };
 const zoomState = {
   current: 164,
   target: 164,
   min: 108,
   max: 220,
-  step: 12
+  step: 12,
 };
 
 const scene = new THREE.Scene();
@@ -42,7 +48,7 @@ camera.position.z = zoomState.current;
 
 const renderer = new THREE.WebGLRenderer({
   antialias: true,
-  alpha: true
+  alpha: true,
 });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.8));
 renderer.setClearColor(0x000000, 0);
@@ -62,7 +68,7 @@ const palette = [
   new THREE.Color("#c84b6f"),
   new THREE.Color("#df8aa5"),
   new THREE.Color("#f1ddce"),
-  new THREE.Color("#fff8f4")
+  new THREE.Color("#fff8f4"),
 ];
 
 for (let index = 0; index < particleCount; index += 1) {
@@ -80,7 +86,7 @@ geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
 geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 
 const sprite = new THREE.TextureLoader().load(
-  "https://threejs.org/examples/textures/sprites/disc.png"
+  "https://threejs.org/examples/textures/sprites/disc.png",
 );
 
 const material = new THREE.PointsMaterial({
@@ -91,7 +97,7 @@ const material = new THREE.PointsMaterial({
   transparent: true,
   opacity: 0.9,
   depthWrite: false,
-  blending: THREE.NormalBlending
+  blending: THREE.NormalBlending,
 });
 
 const points = new THREE.Points(geometry, material);
@@ -107,7 +113,7 @@ function blossomFlower(cx, cy, petals, radius, color) {
     for (let depth = 0; depth < 3; depth += 1) {
       pts.push({
         x: cx + polarRadius * Math.cos(angle) + (Math.random() - 0.5) * 0.8,
-        y: cy + polarRadius * Math.sin(angle) + (Math.random() - 0.5) * 0.8
+        y: cy + polarRadius * Math.sin(angle) + (Math.random() - 0.5) * 0.8,
       });
       cols.push(color);
     }
@@ -128,7 +134,7 @@ function roseFlower(cx, cy, turns, scale, color) {
     for (let depth = 0; depth < 3; depth += 1) {
       pts.push({
         x: cx + x * scale + (Math.random() - 0.5) * 0.7,
-        y: cy + y * scale + (Math.random() - 0.5) * 0.7
+        y: cy + y * scale + (Math.random() - 0.5) * 0.7,
       });
       cols.push(color);
     }
@@ -152,7 +158,7 @@ function miniHeart(cx, cy, scale, color) {
     for (let depth = 0; depth < 2; depth += 1) {
       pts.push({
         x: cx + x * scale + (Math.random() - 0.5) * 0.55,
-        y: cy + y * scale + (Math.random() - 0.5) * 0.55
+        y: cy + y * scale + (Math.random() - 0.5) * 0.55,
       });
       cols.push(color);
     }
@@ -172,7 +178,7 @@ function stem(x, topY, length, color) {
     for (let depth = 0; depth < 2; depth += 1) {
       pts.push({
         x: px + (Math.random() - 0.5) * 0.5,
-        y: py + (Math.random() - 0.5) * 0.5
+        y: py + (Math.random() - 0.5) * 0.5,
       });
       cols.push(color);
     }
@@ -194,7 +200,7 @@ function leaf(cx, cy, width, height, color) {
     for (let depth = 0; depth < 2; depth += 1) {
       pts.push({
         x: cx + width * Math.cos(angle) + (Math.random() - 0.5) * 0.4,
-        y: cy + height * Math.sin(angle) + (Math.random() - 0.5) * 0.4
+        y: cy + height * Math.sin(angle) + (Math.random() - 0.5) * 0.4,
       });
       cols.push(color);
     }
@@ -227,12 +233,12 @@ function wrapping(cx, cy, width, height, color) {
   for (let step = 0; step <= 1; step += 0.02) {
     pts.push({
       x: cx - width * step,
-      y: cy - height + height * step * 1.2
+      y: cy - height + height * step * 1.2,
     });
     cols.push(color);
     pts.push({
       x: cx + width * step,
-      y: cy - height + height * step * 1.2
+      y: cy - height + height * step * 1.2,
     });
     cols.push(color);
   }
@@ -248,7 +254,7 @@ function babyBreath(cx, cy, radius, color) {
     for (let depth = 0; depth < 2; depth += 1) {
       pts.push({
         x: cx + Math.cos(angle) * radius + (Math.random() - 0.5) * 0.45,
-        y: cy + Math.sin(angle) * radius + (Math.random() - 0.5) * 0.45
+        y: cy + Math.sin(angle) * radius + (Math.random() - 0.5) * 0.45,
       });
       cols.push(color);
     }
@@ -266,7 +272,7 @@ function fluffyBloom(cx, cy, radius, density, color) {
     const dist = Math.pow(Math.random(), 0.75) * radius;
     pts.push({
       x: cx + Math.cos(angle) * dist + (Math.random() - 0.5) * 0.9,
-      y: cy + Math.sin(angle) * dist + (Math.random() - 0.5) * 0.9
+      y: cy + Math.sin(angle) * dist + (Math.random() - 0.5) * 0.9,
     });
     cols.push(color);
   }
@@ -281,7 +287,7 @@ function fillerSprig(cx, cy, count, spread, color) {
   for (let index = 0; index < count; index += 1) {
     pts.push({
       x: cx + (Math.random() - 0.5) * spread,
-      y: cy + (Math.random() - 0.5) * spread
+      y: cy + (Math.random() - 0.5) * spread,
     });
     cols.push(color);
   }
@@ -379,7 +385,10 @@ function textTargets(text) {
     for (let x = 0; x < canvas.width; x += 4) {
       const offset = (y * canvas.width + x) * 4;
       if (data[offset] > 150) {
-        pts.push({ x: (x - canvas.width / 2) / 4, y: (canvas.height / 2 - y) / 4 });
+        pts.push({
+          x: (x - canvas.width / 2) / 4,
+          y: (canvas.height / 2 - y) / 4,
+        });
       }
     }
   }
@@ -450,7 +459,7 @@ function loadExternalScript(src) {
         script.dataset.loaded = "true";
         resolve();
       },
-      { once: true }
+      { once: true },
     );
     script.addEventListener("error", reject, { once: true });
     document.head.appendChild(script);
@@ -464,14 +473,14 @@ function withTimeout(promise, timeoutMs, message) {
       window.setTimeout(() => {
         reject(new Error(message));
       }, timeoutMs);
-    })
+    }),
   ]);
 }
 
 async function startGestureControl() {
   if (state.cameraStarted) {
     stopGestureControl(
-      "Đã tắt camera. Quay lại điều khiển bằng chuột. Rê để xoay, lăn chuột để zoom."
+      "Đã tắt camera. Quay lại điều khiển bằng chuột. Rê để xoay, lăn chuột để zoom.",
     );
     return;
   }
@@ -481,7 +490,8 @@ async function startGestureControl() {
   }
 
   if (!navigator.mediaDevices?.getUserMedia) {
-    gestureStatus.textContent = "Trình duyệt này chưa hỗ trợ camera để điều khiển.";
+    gestureStatus.textContent =
+      "Trình duyệt này chưa hỗ trợ camera để điều khiển.";
     return;
   }
 
@@ -498,8 +508,8 @@ async function startGestureControl() {
       video: {
         facingMode: "user",
         width: { ideal: 640 },
-        height: { ideal: 480 }
-      }
+        height: { ideal: 480 },
+      },
     });
 
     state.stream = stream;
@@ -507,20 +517,23 @@ async function startGestureControl() {
     await gestureVideo.play().catch(() => {});
 
     await withTimeout(
-      loadExternalScript("https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"),
+      loadExternalScript(
+        "https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js",
+      ),
       10000,
-      "Tải thư viện nhận diện tay quá lâu."
+      "Tải thư viện nhận diện tay quá lâu.",
     );
 
     const hands = new window.Hands({
-      locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+      locateFile: (file) =>
+        `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`,
     });
 
     hands.setOptions({
       maxNumHands: 1,
       modelComplexity: 1,
       minDetectionConfidence: 0.65,
-      minTrackingConfidence: 0.65
+      minTrackingConfidence: 0.65,
     });
 
     hands.onResults((results) => {
@@ -538,15 +551,25 @@ async function startGestureControl() {
       const dx = landmarks[4].x - landmarks[8].x;
       const dy = landmarks[4].y - landmarks[8].y;
       const distance = Math.sqrt(dx * dx + dy * dy);
-      state.pinchScale = THREE.MathUtils.clamp(1 + (0.24 - distance * 2.15), 0.7, 2.1);
+      state.pinchScale = THREE.MathUtils.clamp(
+        1 + (0.24 - distance * 2.15),
+        0.7,
+        2.1,
+      );
 
       const extendedFingerCount = [
         [8, 6, 5],
         [12, 10, 9],
         [16, 14, 13],
-        [20, 18, 17]
+        [20, 18, 17],
       ].reduce((count, [tip, pip, mcp]) => {
-        return count + (landmarks[tip].y < landmarks[pip].y && landmarks[pip].y < landmarks[mcp].y ? 1 : 0);
+        return (
+          count +
+          (landmarks[tip].y < landmarks[pip].y &&
+          landmarks[pip].y < landmarks[mcp].y
+            ? 1
+            : 0)
+        );
       }, 0);
 
       state.openPalm = extendedFingerCount >= 3;
@@ -581,7 +604,7 @@ async function startGestureControl() {
     stopGestureControl();
     if (error?.name === "NotAllowedError") {
       gestureStatus.textContent =
-        "Bạn vừa từ chối quyền camera. Hãy cho phép camera rồi bấm lại nút này.";
+        "Bạn vừa từ chối quyền camera. Cho phép camera rồi bấm lại nút này nhé.";
     } else if (error?.name === "NotFoundError") {
       gestureStatus.textContent =
         "Thiết bị này không tìm thấy camera khả dụng để bật điều khiển bằng tay.";
@@ -590,7 +613,7 @@ async function startGestureControl() {
         "Trình duyệt tải hand-tracking quá lâu. Hãy thử tải lại trang rồi bấm lại.";
     } else {
       gestureStatus.textContent =
-        "Không mở được camera. Bạn vẫn có thể dùng chuột hoặc chạm để xem hiệu ứng 3D.";
+        "Không mở được camera. Mày vẫn có thể dùng chuột hoặc chạm để xem hiệu ứng 3D.";
     }
   } finally {
     state.startingCamera = false;
@@ -621,7 +644,9 @@ startGestureBtn.addEventListener("click", startGestureControl);
 
 toggleMessageBtn.addEventListener("click", () => {
   state.manualMessage = !state.manualMessage;
-  toggleMessageBtn.textContent = state.manualMessage ? "Hiện bó hoa" : "Hiện 27/06";
+  toggleMessageBtn.textContent = state.manualMessage
+    ? "Hiện bó hoa"
+    : "Hiện 27/06";
 });
 
 stage.addEventListener("pointermove", (event) => {
@@ -652,14 +677,20 @@ stage.addEventListener(
     zoomState.target = THREE.MathUtils.clamp(
       zoomState.target + direction * zoomState.step,
       zoomState.min,
-      zoomState.max
+      zoomState.max,
     );
 
     gestureStatus.textContent = `Zoom: ${Math.round(
-      THREE.MathUtils.mapLinear(zoomState.target, zoomState.max, zoomState.min, 100, 160)
+      THREE.MathUtils.mapLinear(
+        zoomState.target,
+        zoomState.max,
+        zoomState.min,
+        100,
+        160,
+      ),
     )}% . Lăn chuột để chỉnh, nhấp đúp để reset.`;
   },
-  { passive: false }
+  { passive: false },
 );
 
 stage.addEventListener("dblclick", () => {
@@ -681,16 +712,20 @@ function animate() {
 
   const positionArray = geometry.attributes.position.array;
   const targetShape =
-    state.manualMessage || (state.handPresent && state.openPalm) ? dayMessage : bouquet.pts;
+    state.manualMessage || (state.handPresent && state.openPalm)
+      ? dayMessage
+      : bouquet.pts;
   const scale = state.handPresent ? state.pinchScale : 1;
 
   for (let index = 0; index < particleCount; index += 1) {
     const target = targetShape[index % targetShape.length];
-    positionArray[index * 3] += (target.x * scale - positionArray[index * 3]) * 0.048;
+    positionArray[index * 3] +=
+      (target.x * scale - positionArray[index * 3]) * 0.048;
     positionArray[index * 3 + 1] +=
       (target.y * scale - positionArray[index * 3 + 1]) * 0.048;
     positionArray[index * 3 + 2] +=
-      (Math.sin(index * 0.21 + performance.now() * 0.001) * 8 - positionArray[index * 3 + 2]) *
+      (Math.sin(index * 0.21 + performance.now() * 0.001) * 8 -
+        positionArray[index * 3 + 2]) *
       0.03;
   }
 
@@ -702,7 +737,7 @@ function animate() {
     targetCameraZ = THREE.MathUtils.clamp(
       zoomState.target - (state.pinchScale - 1) * 72,
       zoomState.min,
-      zoomState.max
+      zoomState.max,
     );
   } else {
     targetRotationY = pointer.x * Math.PI * 0.65;
