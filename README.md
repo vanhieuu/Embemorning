@@ -6,9 +6,9 @@ Microsite chuc mung sinh nhat duoc deploy bang GitHub Pages.
 
 Mo file `script.js` va cap nhat cac truong trong `birthdayConfig`:
 
-- `recipientName`: ten nguoi nhan
-- `fromName`: ten cua ban
-- `birthdayDate`: ngay sinh theo dinh dang `YYYY-MM-DD`, hien dang la `2026-04-29`
+- `recipientName`: Tên người nhận
+- `fromName`: tên của bạn
+- `birthdayDate`: ngay sinh theo dinh dang `YYYY-MM-DD`, hien dang la `2026-06-27`
 - `heroLead`, `heroNote`, `storyIntro`, `finalTitle`, `finalCopy`
 - `wishes`, `moments`, `gifts`, `letterTitle`, `letterBody`
 
