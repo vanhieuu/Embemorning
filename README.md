@@ -8,19 +8,26 @@ Mo file `script.js` va cap nhat cac truong trong `birthdayConfig`:
 
 - `recipientName`: ten nguoi nhan
 - `fromName`: ten cua ban
-- `birthdayDate`: ngay sinh theo dinh dang `YYYY-MM-DD`, hien dang la `2026-04-29`
+- `birthdayDate`: ngay sinh theo dinh dang `YYYY-MM-DD`
 - `heroLead`, `heroNote`, `storyIntro`, `finalTitle`, `finalCopy`
-- `wishes`, `moments`, `gifts`, `letterTitle`, `letterBody`
+- `wishes`, `moments`, `letterTitle`, `letterBody`
+
+Mo file `index.html` neu can doi text co dinh o section phao hoa hoac 3D.
 
 ## Chay local
 
-Day la static site, co the preview bang bat ky server don gian nao, vi du:
+Khong mo `index.html` bang `file://`. Browser se chan `type="module"` va import map, dan den phan 3D bi loi CORS.
+
+Cach nhanh nhat tren Windows:
+
+1. Chay `start-local.bat`
+2. Trang se mo tai `http://127.0.0.1:4173`
+
+Neu muon chay bang terminal:
 
 ```bash
-python3 -m http.server 4173
+node serve-local.js
 ```
-
-Sau do mo `http://localhost:4173`.
 
 ## Deploy
 

@@ -25,6 +25,10 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
+    <div class="runtime-warning" id="runtimeWarning" hidden>
+      Trang này đang được mở bằng <code>file://</code>, nên phần 3D và module sẽ bị chặn.
+      Hãy chạy <code>start-local.bat</code> rồi mở <code>http://127.0.0.1:4173</code>.
+    </div>
     <div class="ambient ambient-left"></div>
     <div class="ambient ambient-right"></div>
     <div class="sparkles" id="sparkles"></div>
@@ -40,7 +44,7 @@
 
           <div class="hero-actions">
             <button class="primary-btn" id="openLetterBtn">Mở thư ngày 27/06</button>
-            <a class="ghost-btn" href="#surprises">Mở hộp quà</a>
+            <a class="ghost-btn" href="#celebration">Xem pháo hoa</a>
           </div>
         </div>
 
@@ -113,12 +117,31 @@
         <div class="moments-grid" id="momentsGrid"></div>
       </section>
 
-      <section class="panel surprises-section" id="surprises">
+      <section class="panel celebration-section" id="celebration">
         <div class="section-heading">
-          <p class="eyebrow">Mở Những Bất Ngờ</p>
-          <h2>Bấm vào từng món quà để mở những lời chúc đã được cất sẵn cho ngày này</h2>
+          <p class="eyebrow">Một Màn Chúc Mừng</p>
+          <h2>Một chút pháo hoa cho ngày này thêm vui là đủ rồi</h2>
         </div>
-        <div class="gift-grid" id="giftGrid"></div>
+        <p class="celebration-copy">
+          Không cần mở từng thẻ nữa. Cứ để pháo hoa nổ một vòng cho gọn, sáng và đỡ sến hơn.
+        </p>
+        <div class="celebration-stage">
+          <canvas id="fireworksCanvas" aria-label="Hiệu ứng pháo hoa chúc mừng sinh nhật"></canvas>
+          <div class="celebration-overlay">
+            <div class="celebration-textwrap" aria-hidden="true">
+              <span class="celebration-halo"></span>
+              <span class="celebration-badge">
+                <span class="celebration-letter">H</span>
+                <span class="celebration-letter">P</span>
+                <span class="celebration-letter">B</span>
+                <span class="celebration-letter">D</span>
+              </span>
+            </div>
+            <button class="primary-btn celebration-btn" id="replayFireworksBtn" type="button">
+              Bắn lại pháo hoa
+            </button>
+          </div>
+        </div>
       </section>
 
       <section class="panel interactive-section" id="interactiveBouquet">
@@ -126,12 +149,12 @@
           <div class="interactive-copy-block">
             <div class="section-heading">
               <p class="eyebrow">Bất Ngờ 3D</p>
-              <h2>Bó hoa ánh sáng này cũng được giữ lại riêng cho đêm trước ngày 27/06</h2>
+              <h2>Tao để riêng cho mày một bông hoa ánh sáng, nhìn nhẹ thôi nhưng vẫn đủ nổi</h2>
             </div>
             <p class="interactive-copy">
-              Di chuột để xoay bó hoa. Nếu muốn, bạn có thể bật camera để dùng bàn tay điều
-              khiển, và khi xòe tay ra, cụm hạt sẽ đổi thành mốc 27/06 như một tấm thiệp sáng
-              lên giữa màn hình.
+              Di chuột để xoay bông hoa. Nếu muốn, bạn có thể bật camera để dùng bàn tay điều
+              khiển, và khi xòe tay ra, cụm hạt sẽ đổi thành dòng HPBD cùng chữ My Princess như
+              một tấm thiệp sáng lên giữa màn hình.
             </p>
             <div class="interactive-controls">
               <button class="primary-btn" id="startGestureBtn" type="button">
@@ -172,20 +195,18 @@
       </div>
     </div>
 
-    <div class="surprise-overlay" id="surpriseOverlay" aria-hidden="true">
-      <div class="flower-burst" id="flowerBurst"></div>
-      <div class="surprise-card" id="surpriseCard">
-        <button class="close-btn surprise-close" id="closeSurpriseBtn" aria-label="Đóng thiệp">
-          ×
-        </button>
-        <p class="eyebrow">Thiệp Vừa Mở</p>
-        <h2 id="surpriseTitle"></h2>
-        <p class="surprise-message" id="surpriseMessage"></p>
-      </div>
-    </div>
-
+    <script>
+      if (window.location.protocol === "file:") {
+        document.documentElement.classList.add("is-file-protocol");
+        document.getElementById("runtimeWarning")?.removeAttribute("hidden");
+      } else {
+        const moduleScript = document.createElement("script");
+        moduleScript.type = "module";
+        moduleScript.src = "./interactive-surprise.js";
+        document.body.appendChild(moduleScript);
+      }
+    </script>
     <script src="./script.js"></script>
     <video id="gestureVideo" autoplay playsinline muted hidden></video>
-    <script type="module" src="./interactive-surprise.js"></script>
   </body>
 </html>

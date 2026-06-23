@@ -20,7 +20,7 @@ if (
 }
 
 const isCompactScreen = window.innerWidth < 768;
-const particleCount = isCompactScreen ? 18000 : 32000;
+const particleCount = isCompactScreen ? 22000 : 38000;
 const pointer = { x: 0, y: 0 };
 const state = {
   handPresent: false,
@@ -57,7 +57,7 @@ stage.appendChild(renderer.domElement);
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
 
-const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.32, 0.7, 0.9);
+const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.56, 0.96, 0.28);
 composer.addPass(bloom);
 
 const geometry = new THREE.BufferGeometry();
@@ -90,13 +90,14 @@ const sprite = new THREE.TextureLoader().load(
 );
 
 const material = new THREE.PointsMaterial({
-  size: isCompactScreen ? 0.62 : 0.68,
+  size: isCompactScreen ? 0.94 : 1.04,
   map: sprite,
-  alphaTest: 0.24,
+  alphaTest: 0.08,
   vertexColors: true,
   transparent: true,
-  opacity: 0.9,
+  opacity: 0.95,
   depthWrite: false,
+  depthTest: false,
   blending: THREE.NormalBlending,
 });
 
@@ -280,6 +281,72 @@ function fluffyBloom(cx, cy, radius, density, color) {
   return { pts, cols };
 }
 
+function petalBloom(
+  cx,
+  cy,
+  petalCount,
+  petalRadius,
+  orbitRadius,
+  color,
+  coreColor,
+) {
+  const pts = [];
+  const cols = [];
+
+  function add(shape) {
+    pts.push(...shape.pts);
+    cols.push(...shape.cols);
+  }
+
+  for (let ring = 0; ring < 3; ring += 1) {
+    const offset = ring * (Math.PI / petalCount);
+    const dist = orbitRadius - ring * petalRadius * 0.48;
+    const radius = Math.max(petalRadius - ring * 0.9, 2.4);
+    const density = 56 + ring * 18;
+
+    for (let index = 0; index < petalCount; index += 1) {
+      const angle = (Math.PI * 2 * index) / petalCount + offset;
+      add(
+        fluffyBloom(
+          cx + Math.cos(angle) * dist,
+          cy + Math.sin(angle) * dist,
+          radius,
+          density,
+          color,
+        ),
+      );
+    }
+  }
+
+  add(fluffyBloom(cx, cy, petalRadius * 1.18, 168, coreColor || color));
+
+  return { pts, cols };
+}
+
+function petalShape(cx, cy, length, width, rotation, color, density = 220) {
+  const pts = [];
+  const cols = [];
+  const cos = Math.cos(rotation);
+  const sin = Math.sin(rotation);
+
+  for (let index = 0; index < density; index += 1) {
+    const yNorm = Math.random();
+    const spread = Math.pow(Math.sin(Math.PI * yNorm), 0.78);
+    const x = (Math.random() - 0.5) * 2 * width * spread;
+    const y = (yNorm - 0.24) * length;
+    const localX = x * (0.88 + Math.random() * 0.24);
+    const localY = y + (Math.random() - 0.5) * 0.8;
+
+    pts.push({
+      x: cx + localX * cos - localY * sin,
+      y: cy + localX * sin + localY * cos,
+    });
+    cols.push(color);
+  }
+
+  return { pts, cols };
+}
+
 function fillerSprig(cx, cy, count, spread, color) {
   const pts = [];
   const cols = [];
@@ -304,79 +371,89 @@ function bouquetTargets() {
     cols = cols.concat(shape.cols);
   }
 
-  const stemColor = new THREE.Color("#5d873f");
-  const paperColor = new THREE.Color("#f3dfd0");
-  const paperShade = new THREE.Color("#e7c7b3");
-  const burgundyRose = new THREE.Color("#b73f63");
-  const velvetRose = new THREE.Color("#d05e82");
-  const blushRose = new THREE.Color("#de9ab0");
-  const creamRose = new THREE.Color("#f2dfd0");
+  const stemColor = new THREE.Color("#6a9546");
+  const deepStemColor = new THREE.Color("#547a36");
+  const burgundyRose = new THREE.Color("#cf6489");
+  const velvetRose = new THREE.Color("#e287a7");
+  const blushRose = new THREE.Color("#f0b8cb");
+  const creamRose = new THREE.Color("#fff0e7");
   const ivoryBud = new THREE.Color("#fff8f4");
+  const warmPink = new THREE.Color("#f7cada");
 
-  add(wrapping(4, -18, 54, 42, paperColor));
-  add(wrapping(6, -24, 42, 30, paperShade));
+  add(stem(-2.8, -6, 132, deepStemColor));
+  add(stem(0, -2, 138, stemColor));
+  add(stem(2.8, -6, 132, deepStemColor));
 
-  add(stem(-34, 2, 108, stemColor));
-  add(stem(-18, 18, 118, stemColor));
-  add(stem(0, 30, 126, stemColor));
-  add(stem(18, 20, 116, stemColor));
-  add(stem(38, 6, 108, stemColor));
-  add(stem(58, 0, 96, stemColor));
-  add(stem(-56, -4, 92, stemColor));
-  add(stem(-72, -10, 78, stemColor));
+  add(leaf(-26, -34, 16, 7.2, new THREE.Color("#6f9643")));
+  add(leaf(24, -60, 15, 6.8, new THREE.Color("#6b9040")));
+  add(leaf(-20, -82, 11.5, 5.2, new THREE.Color("#7ca251")));
+  add(leaf(14, -100, 10, 4.8, new THREE.Color("#7ca251")));
+  add(leaf(-8, -8, 7.8, 3.6, new THREE.Color("#5f8539")));
+  add(leaf(8, -8, 7.8, 3.6, new THREE.Color("#5f8539")));
+  add(leaf(-34, 4, 8.2, 3.8, new THREE.Color("#6f9643")));
+  add(leaf(34, -20, 8.2, 3.8, new THREE.Color("#6f9643")));
+  const flowerCenterY = 54;
+  const outerPetals = 8;
+  const innerPetals = 5;
 
-  add(leaf(-26, -38, 12, 5.2, new THREE.Color("#739848")));
-  add(leaf(-8, -52, 12.5, 5.8, new THREE.Color("#678c3f")));
-  add(leaf(16, -42, 11.2, 5, new THREE.Color("#5d833b")));
-  add(leaf(36, -24, 10.2, 4.7, new THREE.Color("#7a9f4e")));
-  add(leaf(-42, -18, 9.4, 4.5, new THREE.Color("#709447")));
-  add(leaf(52, -14, 9.2, 4.3, new THREE.Color("#709447")));
-  add(leaf(-60, 2, 8.6, 4.1, new THREE.Color("#709447")));
-  add(leaf(62, -2, 8.6, 4.1, new THREE.Color("#709447")));
+  for (let index = 0; index < outerPetals; index += 1) {
+    const angle = -Math.PI / 2 + (Math.PI * 2 * index) / outerPetals;
+    add(
+      petalShape(
+        Math.cos(angle) * 13,
+        flowerCenterY + Math.sin(angle) * 10,
+        20,
+        8.2,
+        angle + Math.PI / 2,
+        index % 2 === 0 ? blushRose : creamRose,
+        180,
+      ),
+    );
+  }
 
-  add(fluffyBloom(-50, 26, 15, 320, creamRose));
-  add(fluffyBloom(-22, 54, 14, 280, blushRose));
-  add(fluffyBloom(8, 76, 16, 340, ivoryBud));
-  add(fluffyBloom(34, 50, 18, 360, creamRose));
-  add(fluffyBloom(60, 32, 14, 280, blushRose));
+  for (let index = 0; index < innerPetals; index += 1) {
+    const angle = -Math.PI / 2 + (Math.PI * 2 * index) / innerPetals;
+    add(
+      petalShape(
+        Math.cos(angle) * 8.5,
+        flowerCenterY + Math.sin(angle) * 6.8,
+        15.5,
+        6.4,
+        angle + Math.PI / 2,
+        index % 2 === 0 ? warmPink : velvetRose,
+        150,
+      ),
+    );
+  }
 
-  add(roseFlower(-18, 18, 5.1, 2.7, velvetRose));
-  add(roseFlower(2, 22, 5.4, 2.95, burgundyRose));
-  add(roseFlower(24, 18, 5, 2.65, velvetRose));
-  add(roseFlower(-42, 4, 4.6, 2.2, blushRose));
-  add(roseFlower(46, 8, 4.6, 2.25, creamRose));
-  add(roseFlower(66, 14, 4.2, 1.95, creamRose));
+  add(petalShape(0, flowerCenterY + 1.5, 13.5, 5.8, 0, ivoryBud, 130));
+  add(fluffyBloom(0, flowerCenterY, 5.4, 150, ivoryBud));
+  add(fluffyBloom(0, flowerCenterY - 0.8, 3.4, 90, burgundyRose));
+  add(blossomFlower(0, flowerCenterY, 6, 4.4, burgundyRose));
 
-  add(blossomFlower(-68, 44, 5, 8.5, creamRose));
-  add(blossomFlower(74, 48, 6, 8.2, blushRose));
-  add(blossomFlower(14, 38, 7, 7.2, creamRose));
-  add(blossomFlower(-6, 94, 6, 8.4, ivoryBud));
-
-  add(babyBreath(-8, 64, 6, ivoryBud));
-  add(babyBreath(24, 68, 6, ivoryBud));
-  add(babyBreath(-30, 70, 5.2, ivoryBud));
-  add(babyBreath(54, 62, 5, ivoryBud));
-  add(fillerSprig(-12, 34, 90, 16, ivoryBud));
-  add(fillerSprig(44, 26, 80, 14, creamRose));
-
-  add(miniHeart(6, 24, 1.4, new THREE.Color("#d97592")));
-  add(ribbon(8, -22, 9.4, new THREE.Color("#ce6d8a")));
+  add(petalShape(-24, flowerCenterY + 8, 10.5, 4.6, -1.08, creamRose, 88));
+  add(petalShape(24, flowerCenterY + 8, 10.5, 4.6, 1.08, creamRose, 88));
+  add(babyBreath(-18, 69, 4.1, ivoryBud));
+  add(babyBreath(20, 71, 4.1, ivoryBud));
 
   return { pts, cols };
 }
 
-function textTargets(text) {
+function textTargets(lines) {
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
   canvas.width = 900;
-  canvas.height = 320;
+  canvas.height = 420;
 
   context.clearRect(0, 0, canvas.width, canvas.height);
   context.fillStyle = "white";
-  context.font = "700 190px Georgia";
   context.textAlign = "center";
   context.textBaseline = "middle";
-  context.fillText(text, canvas.width / 2, canvas.height / 2);
+
+  lines.forEach(({ text, size, y, font = "Georgia", weight = 700 }) => {
+    context.font = `${weight} ${size}px ${font}`;
+    context.fillText(text, canvas.width / 2, canvas.height * y);
+  });
 
   const data = context.getImageData(0, 0, canvas.width, canvas.height).data;
   const pts = [];
@@ -397,15 +474,24 @@ function textTargets(text) {
 }
 
 const bouquet = bouquetTargets();
-const dayMessage = textTargets("HPBD");
+const dayMessage = textTargets([
+  { text: "HPBD", size: 168, y: 0.34 },
+  { text: "My Princess", size: 82, y: 0.66, font: '"Plus Jakarta Sans", sans-serif', weight: 600 },
+]);
 
 for (let index = 0; index < particleCount; index += 1) {
+  const target = bouquet.pts[index % bouquet.pts.length];
+  positions[index * 3] = target.x + (Math.random() - 0.5) * 4.5;
+  positions[index * 3 + 1] = target.y + (Math.random() - 0.5) * 4.5;
+  positions[index * 3 + 2] = (Math.random() - 0.5) * 12;
+
   const color = bouquet.cols[index % bouquet.cols.length];
   colors[index * 3] = color.r;
   colors[index * 3 + 1] = color.g;
   colors[index * 3 + 2] = color.b;
 }
 
+geometry.attributes.position.needsUpdate = true;
 geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 
 function resetHandState() {
@@ -598,7 +684,7 @@ async function startGestureControl() {
     startGestureBtn.disabled = false;
     startGestureBtn.textContent = "Tắt camera điều khiển";
     gestureStatus.textContent =
-      "Camera đã bật. Xòe bàn tay để hiện HPBD, khum hoặc nắm tay lại để trở về bó hoa. Vẫn có thể lăn chuột để zoom.";
+      "Camera đã bật. Xòe bàn tay để hiện HPBD và My Princess, khum hoặc nắm tay lại để trở về bông hoa. Vẫn có thể lăn chuột để zoom.";
   } catch (error) {
     console.error(error);
     stopGestureControl();
@@ -645,7 +731,7 @@ startGestureBtn.addEventListener("click", startGestureControl);
 toggleMessageBtn.addEventListener("click", () => {
   state.manualMessage = !state.manualMessage;
   toggleMessageBtn.textContent = state.manualMessage
-    ? "Hiện bó hoa"
+    ? "Hiện bông hoa"
     : "Ấn vào để biến hình";
 });
 
@@ -696,7 +782,7 @@ stage.addEventListener(
 stage.addEventListener("dblclick", () => {
   zoomState.target = 164;
   gestureStatus.textContent = state.cameraStarted
-    ? "Camera đã bật. Xòe bàn tay để hiện HPBD, khum hoặc nắm tay lại để trở về bó hoa."
+    ? "Camera đã bật. Xòe bàn tay để hiện HPBD và My Princess, khum hoặc nắm tay lại để trở về bông hoa."
     : "Đang ở chế độ chuột. Rê để xoay, lăn chuột để zoom, nhấp đúp để về khung nhìn mặc định.";
 });
 

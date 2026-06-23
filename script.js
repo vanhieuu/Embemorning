@@ -7,7 +7,7 @@ const birthdayConfig = {
     "Ngày 27/06 nên được bắt đầu bằng một điều gì đó dịu dàng, nên mình làm chiếc web này để mọi lời chúc có chỗ ở lại thật lâu.",
   heroNote:
     "Không màu mè gì lắm. Chỉ là tao nhớ sinh nhật mày, nên ngồi gõ mấy dòng này với vài trò linh tinh để mày mở ra thấy vui.",
-  heroChips: ["đếm ngược tới 27/06", "mở thư tao viết", "xoay bó hoa ánh sáng"],
+  heroChips: ["đếm ngược tới 27/06", "mở thư tao viết", "xoay bông hoa ánh sáng"],
   dateNote: "Tới đúng ngày này thì nhớ vui vẻ tử tế hộ tao.",
   storyIntro:
     "Sinh nhật thì không cần làm quá. Chỉ cần hôm đó mày ăn ngon, ngủ kỹ, bớt cáu và thấy đời ổn hơn bình thường một chút là được.",
@@ -43,35 +43,6 @@ const birthdayConfig = {
       text: "Mày không cần cố giống ai cả, vì kiểu của mày tự nó đã đủ nhớ lâu rồi.",
     },
   ],
-  gifts: [
-    {
-      icon: "01",
-      title: "Quà số một",
-      hint: "Mở ra đi, câu này ngắn thôi.",
-      secret: "Chúc mày sinh nhật vui, đỡ suy, và gặp toàn chuyện tử tế.",
-    },
-    {
-      icon: "02",
-      title: "Quà số hai",
-      hint: "Cái này để dành lúc mày hơi tụt mood.",
-      secret:
-        "Nếu mệt quá thì nghỉ. Không ai chấm điểm mày vì nghỉ một hôm cả.",
-    },
-    {
-      icon: "03",
-      title: "Quà số ba",
-      hint: "Dành cho mấy kế hoạch mày chưa nói hết ra.",
-      secret:
-        "Mong mấy thứ mày đang cố sẽ sớm ra hình ra dạng, đỡ bị đời quay như chong chóng.",
-    },
-    {
-      icon: "04",
-      title: "Quà cuối",
-      hint: "Coi như một cái vỗ vai online.",
-      secret:
-        "Tao không đứng trước mặt để chúc được thì dùng cái web này bù vào vậy.",
-    },
-  ],
   letterTitle: "Mấy dòng tao viết cho mày ngày 27/06",
   letterBody: [
     "Tới sinh nhật mày rồi thì tao không muốn chỉ quăng mỗi câu chúc trên tin nhắn, nên mới ngồi làm luôn cái này.",
@@ -104,7 +75,6 @@ const elementMap = {
   photoGallery: document.getElementById("photoGallery"),
   wishList: document.getElementById("wishList"),
   momentsGrid: document.getElementById("momentsGrid"),
-  giftGrid: document.getElementById("giftGrid"),
   finalTitle: document.getElementById("finalTitle"),
   finalCopy: document.getElementById("finalCopy"),
   letterTitle: document.getElementById("letterTitle"),
@@ -119,11 +89,8 @@ const elementMap = {
   openLetterBtn: document.getElementById("openLetterBtn"),
   closeLetterBtn: document.getElementById("closeLetterBtn"),
   sparkles: document.getElementById("sparkles"),
-  surpriseOverlay: document.getElementById("surpriseOverlay"),
-  flowerBurst: document.getElementById("flowerBurst"),
-  surpriseTitle: document.getElementById("surpriseTitle"),
-  surpriseMessage: document.getElementById("surpriseMessage"),
-  closeSurpriseBtn: document.getElementById("closeSurpriseBtn"),
+  fireworksCanvas: document.getElementById("fireworksCanvas"),
+  replayFireworksBtn: document.getElementById("replayFireworksBtn"),
 };
 
 function parseBirthdayDate(dateString) {
@@ -170,7 +137,6 @@ function populateContent() {
   elementMap.photoGallery.replaceChildren();
   elementMap.wishList.replaceChildren();
   elementMap.momentsGrid.replaceChildren();
-  elementMap.giftGrid.replaceChildren();
   elementMap.letterBody.replaceChildren();
 
   birthdayConfig.heroChips.forEach((chip) => {
@@ -210,54 +176,6 @@ function populateContent() {
     elementMap.momentsGrid.appendChild(item);
   });
 
-  birthdayConfig.gifts.forEach((gift, index) => {
-    const item = document.createElement("article");
-    item.className = "gift-card";
-    item.innerHTML = `
-      <div class="gift-copy">
-        <span class="gift-badge">${gift.icon}</span>
-        <div>
-          <h3>${gift.title}</h3>
-          <p class="gift-hint">${gift.hint}</p>
-          <p class="gift-secret">${gift.secret}</p>
-        </div>
-      </div>
-      <button class="gift-toggle" type="button" data-index="${index}">Mở quà</button>
-    `;
-    elementMap.giftGrid.appendChild(item);
-  });
-}
-
-function createFlowerBurst() {
-  const flowers = ["🌸", "🌷", "🌹", "🌺", "💐", "🌼", "🪻"];
-
-  elementMap.flowerBurst.replaceChildren();
-
-  for (let index = 0; index < 18; index += 1) {
-    const flower = document.createElement("span");
-    flower.className = "burst-flower";
-    flower.textContent = flowers[index % flowers.length];
-    flower.style.left = `${8 + Math.random() * 84}%`;
-    flower.style.top = `${10 + Math.random() * 60}%`;
-    flower.style.animationDelay = `${Math.random() * 180}ms`;
-    flower.style.setProperty("--drift-x", `${-80 + Math.random() * 160}px`);
-    flower.style.setProperty("--drift-y", `${-40 - Math.random() * 140}px`);
-    flower.style.setProperty("--spin", `${-25 + Math.random() * 50}deg`);
-    elementMap.flowerBurst.appendChild(flower);
-  }
-}
-
-function showSurpriseCard(gift) {
-  createFlowerBurst();
-  elementMap.surpriseTitle.textContent = gift.title;
-  elementMap.surpriseMessage.textContent = gift.secret;
-  elementMap.surpriseOverlay.classList.add("is-visible");
-  elementMap.surpriseOverlay.setAttribute("aria-hidden", "false");
-}
-
-function hideSurpriseCard() {
-  elementMap.surpriseOverlay.classList.remove("is-visible");
-  elementMap.surpriseOverlay.setAttribute("aria-hidden", "true");
 }
 
 function getNextBirthday(dateString) {
@@ -340,6 +258,244 @@ function createSparkles() {
   }
 }
 
+function initFireworks() {
+  const canvas = elementMap.fireworksCanvas;
+  const replayButton = elementMap.replayFireworksBtn;
+
+  if (!canvas || !replayButton) {
+    return;
+  }
+
+  const context = canvas.getContext("2d");
+
+  if (!context) {
+    return;
+  }
+
+  const particles = [];
+  const shells = [];
+  const rings = [];
+  let width = 0;
+  let height = 0;
+  let deviceScale = 1;
+  let nextLaunchAt = 0;
+  let launchCount = 0;
+
+  function resizeCanvas() {
+    const rect = canvas.getBoundingClientRect();
+    deviceScale = Math.min(window.devicePixelRatio || 1, 2);
+    width = rect.width;
+    height = rect.height;
+    canvas.width = Math.round(width * deviceScale);
+    canvas.height = Math.round(height * deviceScale);
+    context.setTransform(deviceScale, 0, 0, deviceScale, 0, 0);
+  }
+
+  function addRing(x, y, color) {
+    rings.push({
+      x,
+      y,
+      radius: 6,
+      growth: 2.8 + Math.random() * 1.4,
+      life: 1,
+      decay: 0.022,
+      color
+    });
+  }
+
+  function launchBurst(x, y, spread = 1, palette) {
+    const colors = palette || ["#ffd166", "#ff8fab", "#9bf6ff", "#cdb4db", "#ffffff"];
+    const particleCount = 28 + Math.floor(Math.random() * 14);
+
+    for (let index = 0; index < particleCount; index += 1) {
+      const angle = (Math.PI * 2 * index) / particleCount + Math.random() * 0.35;
+      const speed = (1.3 + Math.random() * 3.2) * spread;
+
+      particles.push({
+        x,
+        y,
+        previousX: x,
+        previousY: y,
+        dx: Math.cos(angle) * speed,
+        dy: Math.sin(angle) * speed,
+        life: 1,
+        decay: 0.011 + Math.random() * 0.018,
+        size: 1.8 + Math.random() * 3.1,
+        color: colors[index % colors.length],
+        trailWidth: 0.8 + Math.random() * 1.8
+      });
+    }
+  }
+
+  function launchShell(x, targetY, spread = 1) {
+    const palettes = [
+      ["#ffd166", "#ff8fab", "#ffffff"],
+      ["#9bf6ff", "#cdb4db", "#ffffff"],
+      ["#ffcad4", "#ffd6a5", "#ffffff"]
+    ];
+    const palette = palettes[Math.floor(Math.random() * palettes.length)];
+
+    shells.push({
+      x,
+      y: height + 18,
+      dx: (Math.random() - 0.5) * 0.7,
+      dy: -(5.6 + Math.random() * 1.5),
+      targetY,
+      spread,
+      palette,
+      color: palette[0]
+    });
+  }
+
+  function explodeShell(shell) {
+    launchBurst(shell.x, shell.y, shell.spread, shell.palette);
+    addRing(shell.x, shell.y, shell.palette[0]);
+
+    if (Math.random() > 0.55) {
+      window.setTimeout(() => {
+        launchBurst(
+          shell.x + (Math.random() - 0.5) * 30,
+          shell.y + (Math.random() - 0.5) * 20,
+          shell.spread * 0.55,
+          shell.palette.slice().reverse()
+        );
+      }, 120 + Math.random() * 140);
+    }
+  }
+
+  function scheduleBurst(cluster = false) {
+    if (!width || !height) {
+      return;
+    }
+
+    const total = cluster ? 3 : launchCount % 4 === 3 ? 2 : 1;
+
+    for (let index = 0; index < total; index += 1) {
+      const delay = index * (160 + Math.random() * 90);
+      window.setTimeout(() => {
+        launchShell(
+          width * (0.16 + Math.random() * 0.68),
+          height * (0.18 + Math.random() * 0.36),
+          0.95 + Math.random() * 0.45
+        );
+      }, delay);
+    }
+
+    launchCount += 1;
+  }
+
+  function animate(now) {
+    context.globalCompositeOperation = "source-over";
+    context.fillStyle = "rgba(19, 10, 18, 0.2)";
+    context.fillRect(0, 0, width, height);
+
+    if (now >= nextLaunchAt) {
+      scheduleBurst();
+      nextLaunchAt = now + 700 + Math.random() * 420;
+    }
+
+    context.globalCompositeOperation = "lighter";
+
+    for (let index = shells.length - 1; index >= 0; index -= 1) {
+      const shell = shells[index];
+      shell.x += shell.dx;
+      shell.y += shell.dy;
+      shell.dy += 0.012;
+
+      context.beginPath();
+      context.strokeStyle = `${shell.color}cc`;
+      context.lineWidth = 2;
+      context.moveTo(shell.x, shell.y + 14);
+      context.lineTo(shell.x, shell.y);
+      context.stroke();
+
+      context.beginPath();
+      context.fillStyle = shell.color;
+      context.arc(shell.x, shell.y, 2.6, 0, Math.PI * 2);
+      context.fill();
+
+      if (shell.y <= shell.targetY || shell.dy >= -0.5) {
+        explodeShell(shell);
+        shells.splice(index, 1);
+      }
+    }
+
+    for (let index = rings.length - 1; index >= 0; index -= 1) {
+      const ring = rings[index];
+      ring.radius += ring.growth;
+      ring.life -= ring.decay;
+
+      if (ring.life <= 0) {
+        rings.splice(index, 1);
+        continue;
+      }
+
+      context.globalAlpha = ring.life * 0.45;
+      context.beginPath();
+      context.strokeStyle = ring.color;
+      context.lineWidth = 1.5;
+      context.arc(ring.x, ring.y, ring.radius, 0, Math.PI * 2);
+      context.stroke();
+    }
+
+    for (let index = particles.length - 1; index >= 0; index -= 1) {
+      const particle = particles[index];
+      particle.previousX = particle.x;
+      particle.previousY = particle.y;
+      particle.x += particle.dx;
+      particle.y += particle.dy;
+      particle.dy += 0.02;
+      particle.dx *= 0.992;
+      particle.life -= particle.decay;
+
+      if (particle.life <= 0) {
+        particles.splice(index, 1);
+        continue;
+      }
+
+      context.globalAlpha = Math.max(particle.life, 0);
+      context.beginPath();
+      context.strokeStyle = particle.color;
+      context.lineWidth = particle.trailWidth * particle.life;
+      context.moveTo(particle.previousX, particle.previousY);
+      context.lineTo(particle.x, particle.y);
+      context.stroke();
+
+      context.beginPath();
+      context.fillStyle = particle.color;
+      context.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+      context.fill();
+    }
+
+    context.globalAlpha = 1;
+    requestAnimationFrame(animate);
+  }
+
+  const resizeObserver = new ResizeObserver(() => {
+    resizeCanvas();
+  });
+
+  resizeObserver.observe(canvas);
+  resizeCanvas();
+
+  replayButton.addEventListener("click", () => {
+    for (let index = 0; index < 4; index += 1) {
+      window.setTimeout(() => {
+        scheduleBurst(index % 2 === 0);
+      }, index * 220);
+    }
+  });
+
+  window.setTimeout(() => {
+    scheduleBurst(true);
+    window.setTimeout(() => {
+      scheduleBurst();
+    }, 260);
+  }, 250);
+
+  requestAnimationFrame(animate);
+}
+
 function bindEvents() {
   elementMap.openLetterBtn.addEventListener("click", () => {
     elementMap.letterModal.classList.add("is-visible");
@@ -357,35 +513,11 @@ function bindEvents() {
       elementMap.letterModal.setAttribute("aria-hidden", "true");
     }
   });
-
-  elementMap.closeSurpriseBtn.addEventListener("click", hideSurpriseCard);
-
-  elementMap.surpriseOverlay.addEventListener("click", (event) => {
-    if (event.target === elementMap.surpriseOverlay) {
-      hideSurpriseCard();
-    }
-  });
-
-  elementMap.giftGrid.addEventListener("click", (event) => {
-    const toggle = event.target.closest(".gift-toggle");
-
-    if (!toggle) {
-      return;
-    }
-
-    const card = toggle.closest(".gift-card");
-    const giftIndex = Number(toggle.dataset.index);
-    const isOpen = card.classList.toggle("is-open");
-    toggle.textContent = isOpen ? "Gấp lại" : "Mở quà";
-
-    if (isOpen) {
-      showSurpriseCard(birthdayConfig.gifts[giftIndex]);
-    }
-  });
 }
 
 populateContent();
 createSparkles();
 bindEvents();
+initFireworks();
 updateCountdown();
 setInterval(updateCountdown, 1000);
