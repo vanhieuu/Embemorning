@@ -508,10 +508,12 @@ h2 {
   position: relative;
 }
 
+body.content-locked .lockable-block,
 .lockable-block.is-locked {
   overflow: hidden;
 }
 
+body.content-locked .lockable-block > *:not(.section-lock),
 .lockable-block.is-locked > *:not(.section-lock) {
   filter: blur(10px);
   opacity: 0.16;
@@ -530,8 +532,10 @@ h2 {
   transition: opacity 220ms ease;
 }
 
+body.content-locked .lockable-block .section-lock,
 .lockable-block.is-locked .section-lock {
   opacity: 1;
+  pointer-events: auto;
 }
 
 .section-lock-card {

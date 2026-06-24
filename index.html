@@ -24,7 +24,7 @@
     </script>
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body>
+  <body class="content-locked">
     <div class="runtime-warning" id="runtimeWarning" hidden>
       Trang này đang được mở bằng <code>file://</code>, nên phần 3D và module sẽ bị chặn.
       Hãy chạy <code>start-local.bat</code> rồi mở <code>http://127.0.0.1:4173</code>.
@@ -43,8 +43,8 @@
           <div class="hero-chips" id="heroChips"></div>
 
           <div class="hero-actions">
-            <button class="primary-btn" id="openLetterBtn">Mở thư ngày 27/06</button>
-            <a class="ghost-btn" id="previewSectionsBtn" href="#celebration">Xem pháo hoa</a>
+            <button class="primary-btn" id="openLetterBtn" disabled>Mở thư ngày 27/06</button>
+            <a class="ghost-btn is-disabled" id="previewSectionsBtn" href="#celebration" aria-disabled="true">Xem pháo hoa</a>
           </div>
         </div>
 
@@ -77,7 +77,7 @@
         </div>
       </section>
 
-      <section class="story-grid">
+      <section class="story-grid lockable-block is-locked">
         <article class="panel story-card accent-card">
           <p class="eyebrow">27/06 Spotlight</p>
           <h2>Một ngày được giữ riêng để mọi lời chúc đều rơi trúng tim bạn</h2>
@@ -88,9 +88,19 @@
           <p class="eyebrow">Bảng Lời Chúc</p>
           <div class="wish-list" id="wishList"></div>
         </article>
+        <div class="section-lock">
+          <div class="section-lock-card">
+            <span class="section-lock-icon" aria-hidden="true">🔒</span>
+            <p class="eyebrow">Đang Khoá</p>
+            <h3 class="section-lock-title">Phần này sẽ tự mở vào 27/06</h3>
+            <p class="section-lock-copy">
+              Cứ để đồng hồ đếm tiếp. Tới đúng ngày thì web sẽ tự mở toàn bộ phần bên dưới.
+            </p>
+          </div>
+        </div>
       </section>
 
-      <section class="panel photo-section" id="photoSection">
+      <section class="panel photo-section lockable-block is-locked" id="photoSection">
         <div class="photo-copy">
           <div class="section-heading">
             <p class="eyebrow">Photo Drop</p>
@@ -107,17 +117,37 @@
         </div>
 
         <div class="photo-gallery" id="photoGallery"></div>
+        <div class="section-lock">
+          <div class="section-lock-card">
+            <span class="section-lock-icon" aria-hidden="true">🔒</span>
+            <p class="eyebrow">Đang Khoá</p>
+            <h3 class="section-lock-title">Phần này sẽ tự mở vào 27/06</h3>
+            <p class="section-lock-copy">
+              Cứ để đồng hồ đếm tiếp. Tới đúng ngày thì web sẽ tự mở toàn bộ phần bên dưới.
+            </p>
+          </div>
+        </div>
       </section>
 
-      <section class="panel moments-section">
+      <section class="panel moments-section lockable-block is-locked">
         <div class="section-heading">
           <p class="eyebrow">Điều Làm Bạn Đặc Biệt</p>
           <h2>Những điều khiến ngày 27/06 đáng được nâng niu hơn một ngày bình thường</h2>
         </div>
         <div class="moments-grid" id="momentsGrid"></div>
+        <div class="section-lock">
+          <div class="section-lock-card">
+            <span class="section-lock-icon" aria-hidden="true">🔒</span>
+            <p class="eyebrow">Đang Khoá</p>
+            <h3 class="section-lock-title">Phần này sẽ tự mở vào 27/06</h3>
+            <p class="section-lock-copy">
+              Cứ để đồng hồ đếm tiếp. Tới đúng ngày thì web sẽ tự mở toàn bộ phần bên dưới.
+            </p>
+          </div>
+        </div>
       </section>
 
-      <section class="panel celebration-section" id="celebration">
+      <section class="panel celebration-section lockable-block is-locked" id="celebration">
         <div class="section-heading">
           <p class="eyebrow">Một Màn Chúc Mừng</p>
           <h2>Một chút pháo hoa cho ngày này thêm vui là đủ rồi</h2>
@@ -137,14 +167,24 @@
                 <span class="celebration-letter">D</span>
               </span>
             </div>
-            <button class="primary-btn celebration-btn" id="replayFireworksBtn" type="button">
+            <button class="primary-btn celebration-btn" id="replayFireworksBtn" type="button" disabled>
               Bắn lại pháo hoa
             </button>
           </div>
         </div>
+        <div class="section-lock">
+          <div class="section-lock-card">
+            <span class="section-lock-icon" aria-hidden="true">🔒</span>
+            <p class="eyebrow">Đang Khoá</p>
+            <h3 class="section-lock-title">Phần này sẽ tự mở vào 27/06</h3>
+            <p class="section-lock-copy">
+              Cứ để đồng hồ đếm tiếp. Tới đúng ngày thì web sẽ tự mở toàn bộ phần bên dưới.
+            </p>
+          </div>
+        </div>
       </section>
 
-      <section class="panel interactive-section" id="interactiveBouquet">
+      <section class="panel interactive-section lockable-block is-locked" id="interactiveBouquet">
         <div class="interactive-top">
           <div class="interactive-copy-block">
             <div class="section-heading">
@@ -172,15 +212,25 @@
         <div class="interactive-stage-wrap">
           <div class="interactive-stage" id="interactiveStage"></div>
         </div>
+        <div class="section-lock">
+          <div class="section-lock-card">
+            <span class="section-lock-icon" aria-hidden="true">🔒</span>
+            <p class="eyebrow">Đang Khoá</p>
+            <h3 class="section-lock-title">Phần này sẽ tự mở vào 27/06</h3>
+            <p class="section-lock-copy">
+              Cứ để đồng hồ đếm tiếp. Tới đúng ngày thì web sẽ tự mở toàn bộ phần bên dưới.
+            </p>
+          </div>
+        </div>
       </section>
 
-      <section class="panel finale-section">
+      <section class="panel finale-section lockable-block is-locked">
         <div class="section-heading">
           <p class="eyebrow">Lá Thư Cuối</p>
           <h2 id="finalTitle"></h2>
         </div>
         <p class="final-copy" id="finalCopy"></p>
-        <button class="letter-scene" id="finalLetterTrigger" type="button" aria-label="Mở lá thư cuối trang">
+        <button class="letter-scene" id="finalLetterTrigger" type="button" aria-label="Mở lá thư cuối trang" disabled>
           <span class="letter-scene-glow" aria-hidden="true"></span>
           <span class="letter-envelope" aria-hidden="true">
             <span class="letter-paper">
@@ -194,6 +244,16 @@
           </span>
           <span class="letter-scene-caption">Ấn vào để mở thư</span>
         </button>
+        <div class="section-lock">
+          <div class="section-lock-card">
+            <span class="section-lock-icon" aria-hidden="true">🔒</span>
+            <p class="eyebrow">Đang Khoá</p>
+            <h3 class="section-lock-title">Phần này sẽ tự mở vào 27/06</h3>
+            <p class="section-lock-copy">
+              Cứ để đồng hồ đếm tiếp. Tới đúng ngày thì web sẽ tự mở toàn bộ phần bên dưới.
+            </p>
+          </div>
+        </div>
       </section>
     </main>
 

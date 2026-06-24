@@ -98,7 +98,7 @@ const elementMap = {
 const lockableSections = Array.from(
   document.querySelectorAll(".page-shell > :not(.hero)"),
 );
-let contentUnlocked = true;
+let contentUnlocked = false;
 
 function parseBirthdayDate(dateString) {
   const parsed = new Date(`${dateString}T00:00:00`);
