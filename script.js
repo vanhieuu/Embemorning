@@ -7,26 +7,26 @@ const birthdayConfig = {
     "Ngày 27/06 nên được bắt đầu bằng một điều gì đó dịu dàng, nên mình làm chiếc web này để mọi lời chúc có chỗ ở lại thật lâu.",
   heroNote:
     "Không màu mè gì lắm. Chỉ là tao nhớ sinh nhật mày, nên ngồi gõ mấy dòng này với vài trò linh tinh để mày mở ra thấy vui.",
-  heroChips: ["đếm ngược tới 27/06", "mở thư tao viết", "xoay bông hoa ánh sáng"],
+  heroChips: ["đếm ngược tới 27/06", "cuối trang có thư", "xoay bông hoa ánh sáng"],
   dateNote: "Tới đúng ngày này thì nhớ vui vẻ tử tế hộ tao.",
   storyIntro:
     "Sinh nhật thì không cần làm quá. Chỉ cần hôm đó mày ăn ngon, ngủ kỹ, bớt cáu và thấy đời ổn hơn bình thường một chút là được.",
   finalTitle:
-    "Chúc mày tuổi mới bớt mệt và gặp nhiều cái hay ho hơn, xinh đẹp hơn nữa",
+    "Cuối trang thì nên có hẳn một lá thư cho mày, như vậy mới đúng không khí hơn",
   finalCopy:
-    "Mong mày làm gì cũng ra kết quả, thích gì thì có cơ hội làm, ghét gì thì bớt phải đụng. Lúc cần nghỉ thì nghỉ, lúc cần lì thì cứ lì. Nói chung là chúc mày năm nay ổn áp hơn năm ngoái.",
+    "Thay vì chốt bằng mấy dòng đứng im, tao để một phong bì ở đây cho mày tự mở. Bấm vào là lá thư hiện ra, nhìn hợp với cái web này hơn nhiều.",
   wishes: [
     {
       title: "Ăn ngon ngủ kỹ",
-      text: "Ít nhất sinh nhật phải được một ngày đầu óc nhẹ và bụng không bị bỏ đói.",
+      text: "Ít nhất thì sinh nhật phải là một ngày đầu óc nhẹ đi một chút, ăn được bữa mình thích và tối về ngủ thật ngon, không bị mấy chuyện linh tinh kéo tụt mood nữa.",
     },
     {
       title: "Ít drama thôi",
-      text: "Bớt mấy chuyện linh tinh làm tụt mood, để mày còn tập trung sống cho vui.",
+      text: "Bớt mấy chuyện linh tinh làm tụt mood, bớt người làm phiền và bớt mấy tình huống vô duyên, để mày còn giữ năng lượng cho những thứ đáng để vui hơn.",
     },
     {
       title: "May mắn đúng lúc",
-      text: "Đúng lúc cần thì có người giúp, đúng lúc cố thì có kết quả, vậy là đẹp.",
+      text: "Lúc cần thì có người giúp một tay, lúc mày cố thì có kết quả tử tế trả về, và những thứ tốt đẹp đến đúng lúc chứ không bắt mày phải chờ quá lâu.",
     },
   ],
   moments: [
@@ -46,19 +46,19 @@ const birthdayConfig = {
   letterTitle: "Mấy dòng tao viết cho mày ngày 27/06",
   letterBody: [
     "Tới sinh nhật mày rồi thì tao không muốn chỉ quăng mỗi câu chúc trên tin nhắn, nên mới ngồi làm luôn cái này.",
-    "Tao chúc mày năm nay đỡ mệt hơn, bớt gặp chuyện xàm hơn, và mấy cái mày đang cố thì sớm có kết quả tử tế.",
-    "Nếu mở cái web này ra mà mày cười được một cái thì coi như tao làm đúng việc rồi. Sinh nhật vui vẻ nhé.",
+    "Tao chúc mày năm nay đỡ mệt hơn, bớt gặp chuyện xàm hơn, và mấy cái mày đang cố thì sớm có kết quả tử tế để công sức của mày không bị trôi đi vô ích.",
+    "Nếu mở cái web này ra mà mày thấy vui hơn một chút, cười được một cái hoặc ít nhất là thấy ngày sinh nhật của mình được nhớ tới đàng hoàng, thì coi như tao làm đúng việc rồi. Sinh nhật vui vẻ nhé.",
   ],
   photos: [
     {
       src: "./assets/photos/portrait.jpg",
       alt: "Chân dung trong tà áo dài xanh nhạt",
-      caption: "Tấm này nhìn rất êm."
+      caption: "Tấm này nhìn dịu và rất vừa mắt."
     },
     {
       src: "./assets/photos/closeup.jpg",
       alt: "Ảnh cận mặt",
-      caption: "Tấm này thì sát thương cao."
+      caption: "Tấm này thì cận một cái là đủ gây thương nhớ."
     }
   ]
 };
@@ -77,6 +77,7 @@ const elementMap = {
   momentsGrid: document.getElementById("momentsGrid"),
   finalTitle: document.getElementById("finalTitle"),
   finalCopy: document.getElementById("finalCopy"),
+  finalLetterTrigger: document.getElementById("finalLetterTrigger"),
   letterTitle: document.getElementById("letterTitle"),
   letterBody: document.getElementById("letterBody"),
   letterSignature: document.getElementById("letterSignature"),
@@ -87,11 +88,17 @@ const elementMap = {
   secondsValue: document.getElementById("secondsValue"),
   letterModal: document.getElementById("letterModal"),
   openLetterBtn: document.getElementById("openLetterBtn"),
+  previewSectionsBtn: document.getElementById("previewSectionsBtn"),
   closeLetterBtn: document.getElementById("closeLetterBtn"),
   sparkles: document.getElementById("sparkles"),
   fireworksCanvas: document.getElementById("fireworksCanvas"),
   replayFireworksBtn: document.getElementById("replayFireworksBtn"),
 };
+
+const lockableSections = Array.from(
+  document.querySelectorAll(".page-shell > :not(.hero)"),
+);
+let contentUnlocked = true;
 
 function parseBirthdayDate(dateString) {
   const parsed = new Date(`${dateString}T00:00:00`);
@@ -106,6 +113,66 @@ function formatBirthdayDate(dateString) {
   }
 
   return `${String(parsed.getDate()).padStart(2, "0")}/${String(parsed.getMonth() + 1).padStart(2, "0")}`;
+}
+
+function ensureSectionLocks(birthdayLabel) {
+  lockableSections.forEach((section) => {
+    section.classList.add("lockable-block");
+
+    const existingLock = section.querySelector(".section-lock");
+    if (existingLock) {
+      const title = existingLock.querySelector(".section-lock-title");
+      if (title) {
+        title.textContent = `Phần này sẽ tự mở vào ${birthdayLabel}`;
+      }
+      return;
+    }
+
+    const overlay = document.createElement("div");
+    overlay.className = "section-lock";
+    overlay.innerHTML = `
+      <div class="section-lock-card">
+        <span class="section-lock-icon" aria-hidden="true">🔒</span>
+        <p class="eyebrow">Đang Khoá</p>
+        <h3 class="section-lock-title">Phần này sẽ tự mở vào ${birthdayLabel}</h3>
+        <p class="section-lock-copy">
+          Cứ để đồng hồ đếm tiếp. Tới đúng ngày thì web sẽ tự mở toàn bộ phần bên dưới.
+        </p>
+      </div>
+    `;
+    section.appendChild(overlay);
+  });
+}
+
+function syncLockedContent(now = new Date()) {
+  const unlockDate = parseBirthdayDate(birthdayConfig.birthdayDate);
+  const birthdayLabel = formatBirthdayDate(birthdayConfig.birthdayDate);
+
+  contentUnlocked = !unlockDate || now >= unlockDate;
+  ensureSectionLocks(birthdayLabel);
+
+  document.body.classList.toggle("content-locked", !contentUnlocked);
+
+  lockableSections.forEach((section) => {
+    section.classList.toggle("is-locked", !contentUnlocked);
+  });
+
+  if (elementMap.openLetterBtn instanceof HTMLButtonElement) {
+    elementMap.openLetterBtn.disabled = !contentUnlocked;
+  }
+
+  if (elementMap.replayFireworksBtn instanceof HTMLButtonElement) {
+    elementMap.replayFireworksBtn.disabled = !contentUnlocked;
+  }
+
+  if (elementMap.finalLetterTrigger instanceof HTMLButtonElement) {
+    elementMap.finalLetterTrigger.disabled = !contentUnlocked;
+  }
+
+  if (elementMap.previewSectionsBtn instanceof HTMLElement) {
+    elementMap.previewSectionsBtn.classList.toggle("is-disabled", !contentUnlocked);
+    elementMap.previewSectionsBtn.setAttribute("aria-disabled", String(!contentUnlocked));
+  }
 }
 
 function populateContent() {
@@ -131,7 +198,7 @@ function populateContent() {
   elementMap.finalTitle.textContent = birthdayConfig.finalTitle;
   elementMap.finalCopy.textContent = birthdayConfig.finalCopy;
   elementMap.letterTitle.textContent = birthdayConfig.letterTitle;
-  elementMap.letterSignature.textContent = `Tao đây, ${birthdayConfig.fromName}`;
+  elementMap.letterSignature.textContent = `${birthdayConfig.fromName}`;
 
   elementMap.heroChips.replaceChildren();
   elementMap.photoGallery.replaceChildren();
@@ -207,6 +274,8 @@ function updateCountdown() {
   const parsed = parseBirthdayDate(birthdayConfig.birthdayDate);
   const birthdayLabel = formatBirthdayDate(birthdayConfig.birthdayDate);
   const now = new Date();
+
+  syncLockedContent(now);
 
   if (!upcomingBirthday || !parsed) {
     elementMap.countdownMessage.textContent =
@@ -497,20 +566,51 @@ function initFireworks() {
 }
 
 function bindEvents() {
-  elementMap.openLetterBtn.addEventListener("click", () => {
+  function openLetterModal() {
+    if (!contentUnlocked) {
+      return;
+    }
+
     elementMap.letterModal.classList.add("is-visible");
     elementMap.letterModal.setAttribute("aria-hidden", "false");
-  });
+  }
 
-  elementMap.closeLetterBtn.addEventListener("click", () => {
+  function closeLetterModal() {
     elementMap.letterModal.classList.remove("is-visible");
     elementMap.letterModal.setAttribute("aria-hidden", "true");
+    elementMap.finalLetterTrigger?.classList.remove("is-opening");
+    if (elementMap.finalLetterTrigger instanceof HTMLButtonElement) {
+      elementMap.finalLetterTrigger.disabled = false;
+    }
+  }
+
+  elementMap.openLetterBtn.addEventListener("click", openLetterModal);
+
+  elementMap.previewSectionsBtn?.addEventListener("click", (event) => {
+    if (!contentUnlocked) {
+      event.preventDefault();
+    }
   });
+
+  elementMap.finalLetterTrigger?.addEventListener("click", () => {
+    if (!contentUnlocked) {
+      return;
+    }
+
+    if (!(elementMap.finalLetterTrigger instanceof HTMLButtonElement)) {
+      return;
+    }
+
+    elementMap.finalLetterTrigger.disabled = true;
+    elementMap.finalLetterTrigger.classList.add("is-opening");
+    window.setTimeout(openLetterModal, 520);
+  });
+
+  elementMap.closeLetterBtn.addEventListener("click", closeLetterModal);
 
   elementMap.letterModal.addEventListener("click", (event) => {
     if (event.target === elementMap.letterModal) {
-      elementMap.letterModal.classList.remove("is-visible");
-      elementMap.letterModal.setAttribute("aria-hidden", "true");
+      closeLetterModal();
     }
   });
 }

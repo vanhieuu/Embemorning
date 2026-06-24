@@ -44,7 +44,7 @@
 
           <div class="hero-actions">
             <button class="primary-btn" id="openLetterBtn">Mở thư ngày 27/06</button>
-            <a class="ghost-btn" href="#celebration">Xem pháo hoa</a>
+            <a class="ghost-btn" id="previewSectionsBtn" href="#celebration">Xem pháo hoa</a>
           </div>
         </div>
 
@@ -97,8 +97,8 @@
             <h2>Ảnh đẹp thì phải có hẳn một góc riêng trong cái web này</h2>
           </div>
           <p class="photo-lead">
-            Tao nhét hai tấm này vào đây vì để ngoài thì phí. Một tấm đứng nền nã, một tấm
-            cận mặt nhìn phát biết ngay nhân vật chính của ngày 27/06 là ai.
+            Tao để riêng hai tấm này ở đây cho gọn và đẹp mắt. Một tấm nhìn dịu dàng, một tấm
+            cận mặt đủ để ai lướt qua cũng biết ngay nhân vật chính của ngày 27/06 là mày.
           </p>
           <div class="photo-notes">
             <span class="photo-note">một tấm dịu</span>
@@ -176,10 +176,24 @@
 
       <section class="panel finale-section">
         <div class="section-heading">
-          <p class="eyebrow">Lời Kết</p>
+          <p class="eyebrow">Lá Thư Cuối</p>
           <h2 id="finalTitle"></h2>
         </div>
         <p class="final-copy" id="finalCopy"></p>
+        <button class="letter-scene" id="finalLetterTrigger" type="button" aria-label="Mở lá thư cuối trang">
+          <span class="letter-scene-glow" aria-hidden="true"></span>
+          <span class="letter-envelope" aria-hidden="true">
+            <span class="letter-paper">
+              <span class="letter-paper-line"></span>
+              <span class="letter-paper-line"></span>
+              <span class="letter-paper-line"></span>
+            </span>
+            <span class="letter-flap"></span>
+            <span class="letter-pocket"></span>
+            <span class="letter-seal">27/06</span>
+          </span>
+          <span class="letter-scene-caption">Ấn vào để mở thư</span>
+        </button>
       </section>
     </main>
 
