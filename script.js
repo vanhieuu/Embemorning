@@ -45,9 +45,9 @@ const birthdayConfig = {
   ],
   letterTitle: "Mấy dòng tao viết cho mày ngày 27/06",
   letterBody: [
-    "Tới sinh nhật mày rồi thì tao không muốn chỉ quăng mỗi câu chúc trên tin nhắn, nên mới ngồi làm luôn cái này.",
-    "Tao chúc mày năm nay đỡ mệt hơn, bớt gặp chuyện xàm hơn, và mấy cái mày đang cố thì sớm có kết quả tử tế để công sức của mày không bị trôi đi vô ích.",
-    "Nếu mở cái web này ra mà mày thấy vui hơn một chút, cười được một cái hoặc ít nhất là thấy ngày sinh nhật của mình được nhớ tới đàng hoàng, thì coi như tao làm đúng việc rồi. Sinh nhật vui vẻ nhé.",
+    "Tới sinh nhật mày rồi nên tao không muốn chỉ gửi vội vài dòng trên tin nhắn, tao muốn làm riêng cho mày một thứ gì đó đàng hoàng hơn để ngày này có chỗ ở lại thật lâu.",
+    "Tao mong năm nay mày sẽ nhẹ lòng hơn, bớt phải ôm mấy chuyện làm mình mệt, và những điều mày đang cố gắng sẽ được đáp lại xứng đáng, để công sức của mày không bị rơi vào khoảng không vô ích.",
+    "Nếu mở cái web này ra mà mày thấy ấm hơn một chút, vui hơn một chút, hoặc chỉ đơn giản là biết có người nhớ rất rõ ngày sinh nhật của mày, thì với tao vậy là đủ rồi. Sinh nhật vui vẻ nhé, mong mày luôn được yêu thương theo đúng cách mày xứng đáng.",
   ],
   photos: [
     {
@@ -100,6 +100,16 @@ const lockableSections = Array.from(
 );
 let contentUnlocked = false;
 
+function isLocalPreview() {
+  const { hostname, protocol } = window.location;
+  return (
+    protocol === "file:" ||
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname === "::1"
+  );
+}
+
 function parseBirthdayDate(dateString) {
   const parsed = new Date(`${dateString}T00:00:00`);
   return Number.isNaN(parsed.getTime()) ? null : parsed;
@@ -147,8 +157,9 @@ function ensureSectionLocks(birthdayLabel) {
 function syncLockedContent(now = new Date()) {
   const unlockDate = parseBirthdayDate(birthdayConfig.birthdayDate);
   const birthdayLabel = formatBirthdayDate(birthdayConfig.birthdayDate);
+  const localPreview = isLocalPreview();
 
-  contentUnlocked = !unlockDate || now >= unlockDate;
+  contentUnlocked = localPreview || !unlockDate || now >= unlockDate;
   ensureSectionLocks(birthdayLabel);
 
   document.body.classList.toggle("content-locked", !contentUnlocked);
@@ -349,6 +360,7 @@ function initFireworks() {
   let deviceScale = 1;
   let nextLaunchAt = 0;
   let launchCount = 0;
+  let lastExternalBurstAt = 0;
 
   function resizeCanvas() {
     const rect = canvas.getBoundingClientRect();
@@ -414,6 +426,37 @@ function initFireworks() {
       palette,
       color: palette[0]
     });
+  }
+
+  function burstAt(normalizedX = 0.5, normalizedY = 0.3, cluster = true) {
+    if (!width || !height) {
+      return false;
+    }
+
+    const now = performance.now();
+    if (now - lastExternalBurstAt < 900) {
+      return false;
+    }
+
+    lastExternalBurstAt = now;
+
+    const clampedX = Math.min(Math.max(normalizedX, 0.12), 0.88);
+    const clampedY = Math.min(Math.max(normalizedY, 0.14), 0.52);
+    const total = cluster ? 3 : 2;
+
+    for (let index = 0; index < total; index += 1) {
+      window.setTimeout(() => {
+        const offsetX = (Math.random() - 0.5) * width * 0.09;
+        const offsetY = (Math.random() - 0.5) * height * 0.05;
+        launchShell(
+          width * clampedX + offsetX,
+          height * clampedY + offsetY,
+          1.05 + Math.random() * 0.35,
+        );
+      }, index * 110);
+    }
+
+    return true;
   }
 
   function explodeShell(shell) {
@@ -562,17 +605,22 @@ function initFireworks() {
     }, 260);
   }, 250);
 
+  window.__embemorningFireworks = {
+    burstAt,
+  };
+
   requestAnimationFrame(animate);
 }
 
 function bindEvents() {
   function openLetterModal() {
     if (!contentUnlocked) {
-      return;
+      return false;
     }
 
     elementMap.letterModal.classList.add("is-visible");
     elementMap.letterModal.setAttribute("aria-hidden", "false");
+    return true;
   }
 
   function closeLetterModal() {
@@ -613,6 +661,10 @@ function bindEvents() {
       closeLetterModal();
     }
   });
+
+  window.__embemorningActions = {
+    openLetter: openLetterModal,
+  };
 }
 
 populateContent();

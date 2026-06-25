@@ -153,7 +153,7 @@
           <h2>Một chút pháo hoa cho ngày này thêm vui là đủ rồi</h2>
         </div>
         <p class="celebration-copy">
-          Không cần mở từng thẻ nữa. Cứ để pháo hoa nổ một vòng cho gọn, sáng và đỡ sến hơn.
+          Chúc mày có một tuổi mới thật rực rỡ, những điều tốt đẹp đến đúng lúc và niềm vui ở lại lâu hơn một chút.
         </p>
         <div class="celebration-stage">
           <canvas id="fireworksCanvas" aria-label="Hiệu ứng pháo hoa chúc mừng sinh nhật"></canvas>
@@ -202,6 +202,9 @@
               </button>
               <button class="ghost-btn" id="toggleMessageBtn" type="button">
                 Ấn vào để biến hình
+              </button>
+              <button class="ghost-btn" id="expandInteractiveBtn" type="button" aria-pressed="false">
+                Phóng to khung tương tác
               </button>
             </div>
             <span class="interactive-status" id="gestureStatus">
@@ -270,6 +273,16 @@
     </div>
 
     <script>
+      const shouldUnlockLocalPreview =
+        window.location.protocol === "file:" ||
+        window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1" ||
+        window.location.hostname === "::1";
+
+      if (shouldUnlockLocalPreview) {
+        document.body.classList.remove("content-locked");
+      }
+
       if (window.location.protocol === "file:") {
         document.documentElement.classList.add("is-file-protocol");
         document.getElementById("runtimeWarning")?.removeAttribute("hidden");

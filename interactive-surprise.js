@@ -4,15 +4,19 @@ import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 
 const stage = document.getElementById("interactiveStage");
+const interactiveSection = document.getElementById("interactiveBouquet");
 const startGestureBtn = document.getElementById("startGestureBtn");
 const toggleMessageBtn = document.getElementById("toggleMessageBtn");
+const expandInteractiveBtn = document.getElementById("expandInteractiveBtn");
 const gestureStatus = document.getElementById("gestureStatus");
 const gestureVideo = document.getElementById("gestureVideo");
 
 if (
   !stage ||
+  !interactiveSection ||
   !startGestureBtn ||
   !toggleMessageBtn ||
+  !expandInteractiveBtn ||
   !gestureStatus ||
   !gestureVideo
 ) {
@@ -25,15 +29,32 @@ const pointer = { x: 0, y: 0 };
 const state = {
   handPresent: false,
   openPalm: false,
+  peacePose: false,
+  pointPose: false,
+  thumbsUpPose: false,
+  pinching: false,
   pinchScale: 1,
   handX: 0,
   handY: 0,
+  pinchX: 0,
+  pinchY: 0,
+  gestureFireworkLock: false,
+  gesturePointBurstAt: 0,
+  gesturePointX: 0,
+  gesturePointY: 0,
+  gestureLetterLock: false,
+  pinchReleasePulse: 0,
   manualMessage: false,
   cameraStarted: false,
   startingCamera: false,
   frameLoopRunning: false,
   stream: null,
 };
+
+const defaultStatusMessage =
+  "Đang ở chế độ chuột. Rê để xoay, lăn chuột để zoom, nhấp đúp để về khung nhìn mặc định.";
+const cameraStatusMessage =
+  "Camera đã bật. Xòe bàn tay để hiện HPBD và My Princess, giơ 1 ngón để gọi pháo hoa theo tay, giơ 2 ngón để bắn thêm pháo hoa, chụm ngón cái với ngón trỏ để gom rồi thả hạt, và giơ ngón cái để mở thư.";
 const zoomState = {
   current: 164,
   target: 164,
@@ -497,9 +518,51 @@ geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 function resetHandState() {
   state.handPresent = false;
   state.openPalm = false;
+  state.peacePose = false;
+  state.pointPose = false;
+  state.thumbsUpPose = false;
+  state.pinching = false;
   state.pinchScale = 1;
   state.handX = 0;
   state.handY = 0;
+  state.pinchX = 0;
+  state.pinchY = 0;
+  state.gestureFireworkLock = false;
+  state.gestureLetterLock = false;
+}
+
+function triggerGestureFireworks() {
+  const fireworkController = window.__embemorningFireworks;
+
+  if (!fireworkController || typeof fireworkController.burstAt !== "function") {
+    return false;
+  }
+
+  const normalizedX = THREE.MathUtils.clamp(0.5 + state.handX * 0.24, 0.16, 0.84);
+  const normalizedY = THREE.MathUtils.clamp(0.28 + state.handY * 0.12, 0.18, 0.48);
+  return fireworkController.burstAt(normalizedX, normalizedY, true);
+}
+
+function triggerPointFireworks() {
+  const fireworkController = window.__embemorningFireworks;
+
+  if (!fireworkController || typeof fireworkController.burstAt !== "function") {
+    return false;
+  }
+
+  const normalizedX = THREE.MathUtils.clamp(0.5 + state.handX * 0.34, 0.12, 0.88);
+  const normalizedY = THREE.MathUtils.clamp(0.24 + state.handY * 0.18, 0.14, 0.5);
+  return fireworkController.burstAt(normalizedX, normalizedY, false);
+}
+
+function triggerLetterGesture() {
+  const actions = window.__embemorningActions;
+
+  if (!actions || typeof actions.openLetter !== "function") {
+    return false;
+  }
+
+  return actions.openLetter();
 }
 
 function resizeScene() {
@@ -630,6 +693,7 @@ async function startGestureControl() {
         return;
       }
 
+      const wasPinching = state.pinching;
       state.handPresent = true;
       state.handX = (landmarks[9].x - 0.5) * 2;
       state.handY = (landmarks[9].y - 0.5) * 2;
@@ -637,28 +701,93 @@ async function startGestureControl() {
       const dx = landmarks[4].x - landmarks[8].x;
       const dy = landmarks[4].y - landmarks[8].y;
       const distance = Math.sqrt(dx * dx + dy * dy);
+      const pinchCenterX = ((landmarks[4].x + landmarks[8].x) / 2 - 0.5) * 2;
+      const pinchCenterY = ((landmarks[4].y + landmarks[8].y) / 2 - 0.5) * 2;
+
       state.pinchScale = THREE.MathUtils.clamp(
         1 + (0.24 - distance * 2.15),
         0.7,
         2.1,
       );
+      state.pinching = distance < 0.06;
+      state.pinchX = pinchCenterX;
+      state.pinchY = pinchCenterY;
 
-      const extendedFingerCount = [
+      const extendedFingerStates = [
         [8, 6, 5],
         [12, 10, 9],
         [16, 14, 13],
         [20, 18, 17],
-      ].reduce((count, [tip, pip, mcp]) => {
-        return (
-          count +
-          (landmarks[tip].y < landmarks[pip].y &&
-          landmarks[pip].y < landmarks[mcp].y
-            ? 1
-            : 0)
-        );
-      }, 0);
+      ].map(([tip, pip, mcp]) => {
+        return landmarks[tip].y < landmarks[pip].y &&
+          landmarks[pip].y < landmarks[mcp].y;
+      });
+
+      const extendedFingerCount = extendedFingerStates.filter(Boolean).length;
+      const [indexFingerExtended, middleFingerExtended, ringFingerExtended, pinkyExtended] =
+        extendedFingerStates;
+      const fingersFolded =
+        !indexFingerExtended &&
+        !middleFingerExtended &&
+        !ringFingerExtended &&
+        !pinkyExtended;
+      const thumbSpanX = Math.abs(landmarks[4].x - landmarks[2].x);
+      const thumbSpanY = Math.abs(landmarks[4].y - landmarks[2].y);
 
       state.openPalm = extendedFingerCount >= 3;
+      state.peacePose =
+        indexFingerExtended &&
+        middleFingerExtended &&
+        !ringFingerExtended &&
+        !pinkyExtended;
+      state.pointPose =
+        indexFingerExtended &&
+        !middleFingerExtended &&
+        !ringFingerExtended &&
+        !pinkyExtended &&
+        !state.pinching;
+      state.thumbsUpPose =
+        fingersFolded &&
+        thumbSpanX > 0.12 &&
+        thumbSpanX > thumbSpanY * 0.9;
+
+      if (state.peacePose) {
+        if (!state.gestureFireworkLock) {
+          const didBurst = triggerGestureFireworks();
+          state.gestureFireworkLock = didBurst;
+        }
+      } else {
+        state.gestureFireworkLock = false;
+      }
+
+      if (state.pointPose) {
+        const now = performance.now();
+        const movedEnough =
+          Math.abs(state.handX - state.gesturePointX) > 0.16 ||
+          Math.abs(state.handY - state.gesturePointY) > 0.16;
+
+        if (now - state.gesturePointBurstAt > 850 || movedEnough) {
+          const didBurst = triggerPointFireworks();
+          if (didBurst) {
+            state.gesturePointBurstAt = now;
+            state.gesturePointX = state.handX;
+            state.gesturePointY = state.handY;
+          }
+        }
+      }
+
+      if (state.thumbsUpPose) {
+        if (!state.gestureLetterLock) {
+          const didOpen = triggerLetterGesture();
+          state.gestureLetterLock = didOpen;
+        }
+      } else {
+        state.gestureLetterLock = false;
+      }
+
+      if (wasPinching && !state.pinching) {
+        state.pinchReleasePulse = 1;
+      }
     });
 
     state.frameLoopRunning = true;
@@ -683,8 +812,7 @@ async function startGestureControl() {
     state.cameraStarted = true;
     startGestureBtn.disabled = false;
     startGestureBtn.textContent = "Tắt camera điều khiển";
-    gestureStatus.textContent =
-      "Camera đã bật. Xòe bàn tay để hiện HPBD và My Princess, khum hoặc nắm tay lại để trở về bông hoa. Vẫn có thể lăn chuột để zoom.";
+    gestureStatus.textContent = cameraStatusMessage;
   } catch (error) {
     console.error(error);
     stopGestureControl();
@@ -735,6 +863,21 @@ toggleMessageBtn.addEventListener("click", () => {
     : "Ấn vào để biến hình";
 });
 
+expandInteractiveBtn.addEventListener("click", () => {
+  const isExpanded = interactiveSection.classList.toggle("is-spotlight");
+  expandInteractiveBtn.setAttribute("aria-pressed", String(isExpanded));
+  expandInteractiveBtn.textContent = isExpanded
+    ? "Thu khung lại"
+    : "Phóng to khung tương tác";
+  resizeScene();
+
+  if (!state.cameraStarted) {
+    gestureStatus.textContent = isExpanded
+      ? "Khung tương tác đã được phóng to. Rê để xoay, lăn chuột để zoom, nhấp đúp để về khung nhìn mặc định."
+      : defaultStatusMessage;
+  }
+});
+
 stage.addEventListener("pointermove", (event) => {
   if (state.handPresent) {
     return;
@@ -782,8 +925,8 @@ stage.addEventListener(
 stage.addEventListener("dblclick", () => {
   zoomState.target = 164;
   gestureStatus.textContent = state.cameraStarted
-    ? "Camera đã bật. Xòe bàn tay để hiện HPBD và My Princess, khum hoặc nắm tay lại để trở về bông hoa."
-    : "Đang ở chế độ chuột. Rê để xoay, lăn chuột để zoom, nhấp đúp để về khung nhìn mặc định.";
+    ? cameraStatusMessage
+    : defaultStatusMessage;
 });
 
 let rotationX = 0;
@@ -802,17 +945,42 @@ function animate() {
       ? dayMessage
       : bouquet.pts;
   const scale = state.handPresent ? state.pinchScale : 1;
+  const gatherStrength = state.pinching
+    ? THREE.MathUtils.clamp((state.pinchScale - 0.9) * 0.9, 0, 0.82)
+    : 0;
+  const gatherX = state.pinchX * 44;
+  const gatherY = -state.pinchY * 34;
+  const releasePulse = state.pinchReleasePulse;
+  const time = performance.now() * 0.0012;
 
   for (let index = 0; index < particleCount; index += 1) {
     const target = targetShape[index % targetShape.length];
+    let targetX = target.x * scale;
+    let targetY = target.y * scale;
+
+    if (gatherStrength > 0) {
+      targetX = THREE.MathUtils.lerp(targetX, gatherX, gatherStrength);
+      targetY = THREE.MathUtils.lerp(targetY, gatherY, gatherStrength);
+    } else if (releasePulse > 0.001) {
+      targetX += Math.cos(index * 0.37 + time) * releasePulse * 18;
+      targetY += Math.sin(index * 0.31 + time * 1.12) * releasePulse * 18;
+    }
+
     positionArray[index * 3] +=
-      (target.x * scale - positionArray[index * 3]) * 0.048;
+      (targetX - positionArray[index * 3]) * 0.048;
     positionArray[index * 3 + 1] +=
-      (target.y * scale - positionArray[index * 3 + 1]) * 0.048;
+      (targetY - positionArray[index * 3 + 1]) * 0.048;
     positionArray[index * 3 + 2] +=
       (Math.sin(index * 0.21 + performance.now() * 0.001) * 8 -
         positionArray[index * 3 + 2]) *
       0.03;
+  }
+
+  if (!state.pinching && state.pinchReleasePulse > 0) {
+    state.pinchReleasePulse *= 0.92;
+    if (state.pinchReleasePulse < 0.02) {
+      state.pinchReleasePulse = 0;
+    }
   }
 
   geometry.attributes.position.needsUpdate = true;

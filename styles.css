@@ -747,6 +747,12 @@ body.content-locked .lockable-block .section-lock,
   margin-top: 1.2rem;
 }
 
+.interactive-section.is-spotlight {
+  background:
+    radial-gradient(circle at top right, rgba(255, 225, 235, 0.3), transparent 34%),
+    linear-gradient(180deg, rgba(255, 250, 246, 0.96), rgba(255, 241, 244, 0.96));
+}
+
 .interactive-status {
   display: block;
   margin-top: 0.85rem;
@@ -767,6 +773,14 @@ body.content-locked .lockable-block .section-lock,
   box-shadow: 0 20px 42px rgba(123, 73, 87, 0.08);
 }
 
+.interactive-section.is-spotlight .interactive-stage-wrap {
+  padding: 1.35rem;
+  border-color: rgba(198, 102, 128, 0.18);
+  box-shadow:
+    0 24px 56px rgba(123, 73, 87, 0.12),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.32);
+}
+
 .interactive-stage {
   position: relative;
   min-height: 520px;
@@ -777,6 +791,18 @@ body.content-locked .lockable-block .section-lock,
     radial-gradient(circle at 50% 72%, rgba(255, 147, 185, 0.16), transparent 30%),
     linear-gradient(180deg, rgba(68, 36, 49, 0.95), rgba(24, 13, 20, 0.98));
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  transition:
+    min-height 220ms ease,
+    box-shadow 220ms ease,
+    transform 220ms ease;
+}
+
+.interactive-section.is-spotlight .interactive-stage {
+  min-height: 620px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 26px 48px rgba(19, 10, 18, 0.16);
+  transform: translateY(-2px);
 }
 
 .interactive-stage canvas {
@@ -1120,6 +1146,10 @@ body.content-locked .lockable-block .section-lock,
   .interactive-stage {
     min-height: 400px;
   }
+
+  .interactive-section.is-spotlight .interactive-stage {
+    min-height: 500px;
+  }
 }
 
 @media (max-width: 680px) {
@@ -1170,6 +1200,10 @@ body.content-locked .lockable-block .section-lock,
   }
   .interactive-stage {
     min-height: 340px;
+  }
+
+  .interactive-section.is-spotlight .interactive-stage {
+    min-height: 400px;
   }
 
   .interactive-section .section-heading h2 {
